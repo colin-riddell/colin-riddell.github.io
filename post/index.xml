@@ -6,10 +6,21 @@
     <description>Recent content in Posts on Colin Riddell</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 19 Sep 2019 18:19:14 +0100</lastBuildDate>
+    <lastBuildDate>Tue, 24 Sep 2019 21:52:10 +0100</lastBuildDate>
     
 	<atom:link href="https://colin-riddell.github.io/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Starting With Scala</title>
+      <link>https://colin-riddell.github.io/post/starting-with-scala/</link>
+      <pubDate>Tue, 24 Sep 2019 21:52:10 +0100</pubDate>
+      
+      <guid>https://colin-riddell.github.io/post/starting-with-scala/</guid>
+      <description>Scala is a functional programming langugage.
+For years, I&amp;rsquo;ve always shied away from functional programming languages. I&amp;rsquo;ve done that becuase I always thought they were only really used by hard-core academic computer scientists to make themselves sound intelligent in front of others.
+I&amp;rsquo;ve found out recently there are some really fun and powerful things to be learned from functional languages, such as Scala. They&amp;rsquo;re fast, good for asynchronous operations, have low latency and because of that they are becoming more prevelant and sought after to meet the real-time, low-latency demands of today.</description>
+    </item>
     
     <item>
       <title>Deploying to Cloud with DigitalOcean &#43; Docker</title>

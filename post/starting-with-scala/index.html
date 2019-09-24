@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Starting With Scala - Colin Riddell</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <meta name="keywords" content="">
+  <link rel="canonical" href="https://colin-riddell.github.io/post/starting-with-scala/">
+
+  
+  
+
+  
+  
+
+  
+  
+
+  <link rel="stylesheet" type="text/css" href="https://colin-riddell.github.io/css/combined-min.css">
+  <link rel="stylesheet" type="text/css" href="https://colin-riddell.github.io/tipuesearch/tipuesearch.css">
+
+</head>
+<body class="">
+
+<div class="site-wrap">
+  <header class="site-header px2 px-responsive">
+  <div class="mt2 wrap">
+    <div class="measure">
+      <a href="https://colin-riddell.github.io" class="site-title">Colin Riddell</a>
+      <nav class="site-nav right">
+      <a href="https://colin-riddell.github.io/about/">About</a>
+<a href="https://colin-riddell.github.io/tags/">Tags</a>
+<a href="https://colin-riddell.github.io/contact/">Contact</a>
+</form>
+
+      </nav>
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</header>
+
+  <div class="post p2 p-responsive wrap" role="main">
+    <div class="measure">
+      <div class="post-header mb2">
+        <h1 class="py2">Starting With Scala</h1>
+        <span class="post-meta">Sep 24, 2019 by Colin Riddell</span><br>
+        
+      </div>
+
+      <article class="post-content">
+      
+
+<p>Scala is a functional programming langugage.</p>
+
+<p>For years, I&rsquo;ve always shied away from functional programming languages. I&rsquo;ve done that becuase I always thought they were only really used by hard-core academic <em>computer scientists</em> to make themselves sound intelligent in front of others.</p>
+
+<p>I&rsquo;ve found out recently there are some really fun and powerful things to be learned from functional languages, such as Scala. They&rsquo;re fast, good for asynchronous operations, have low latency and because of that they are becoming more prevelant and sought after to meet the real-time, low-latency demands of today.</p>
+
+<p>ReactiveX, Observable and event-driven architectures are all important technologies and concepts we can&rsquo;t ignore - and they borrow from functional programming.</p>
+
+<p><img src="http://reactivex.io/assets/Rx_Logo_S.png" alt="http://reactivex.io" /></p>
+
+<p>I&rsquo;m going to learn more about functional languages and share what strikes me as interesting about them, as I try to pick them up.</p>
+
+<pre><code>  _________             .__          
+ /   _____/ ____ _____  |  | _____   
+ \_____  \_/ ___\\__  \ |  | \__  \  
+ /        \  \___ / __ \|  |__/ __ \_
+/_______  /\___  &gt;____  /____(____  /
+        \/     \/     \/          \/ 
+</code></pre>
+
+<h2 id="why-scala">Why Scala</h2>
+
+<p>Not sure when it first surfaced or became popular - but before getting interested I think it&rsquo;s worth asking <strong>why?</strong></p>
+
+<p>🧐 &hellip; Well, I&rsquo;m still not entirely sure why - but am going to take a stab at it.</p>
+
+<h3 id="scala-is-fast">Scala is Fast</h3>
+
+<p>Scala runs on the Java Virtual Machine - before you get your pitchfork out, just, let me explain. Applications running on the JVM are not slow. The JVM merely has a slow startup time. Execution of code once the JVM has fired up is relatively fast.</p>
+
+<p>It&rsquo;s important to not mistake an applications startup time as meaning that the technology or programming language it was written in is slow. Compared to bare-metal, it of-course doesn&rsquo;t compare, but studies do show Scala is faster than Go and Java. (Hundt, 2011 - <a href="https://days2011.scala-lang.org/sites/days2011/files/ws3-1-Hundt.pdf" target="_blank">link</a> )</p>
+
+<p><img src="https://jazzy.id.au/images/blogs/javascalabenchmark/scalavsjava.png" alt="" />
+(DZone, 2012, <a href="https://dzone.com/articles/benchmarking-scala-against" target="_blank">https://dzone.com/articles/benchmarking-scala-against</a>)</p>
+
+<h3 id="scala-is-good-for-asynchronous-tasks">Scala is good for Asynchronous tasks</h3>
+
+<p>Well, Scala has promises. We&rsquo;re familiar with promises from <strong>JavaScript</strong>. To recap, a promise is a placeholder object that&rsquo;s given to the caller of a function or operation that&rsquo;s not yet returned with the completed operation.</p>
+
+<p>Think of a promise as being like a note with your order number on it that you get when you order a coffee in a café. You&rsquo;re very seldom handed your order immediately, so while it&rsquo;s being made they give you a note. A note that <em>promises</em> that you&rsquo;ll be given your coffee when it&rsquo;s ready.</p>
+
+<p>Promises and <em>futures</em> allow operations to happen asynchronously in a non-blocking way freeing the main thread to do something else. You see this on the web, a spinner loading icon will be rendered <strong>while</strong> the data is being fetched asynchronously. Without non-blocking asynchronous calls everything would freeze until it was loaded.</p>
+
+<p>With Scala, since it&rsquo;s working on the back-end the asynchronus stuff happens when doing some database transactions, or making further requests to other services.</p>
+
+      </article>
+
+      <p class="post-meta">Tags:&nbsp;
+        
+      </p>
+
+      
+
+    </div>
+  </div>
+</div>
+    <footer class="footer">
+      <div class="p2 wrap">
+        <div class="measure mt1 center">
+      <nav class="social-icons icons">
+<a class="fa fa-rss rss" href="../../index.xml"></a>
+
+<a class="fa fa-twitter twitter" href="https://twitter.com/colin_riddell"></a>
+
+</nav>
+
+          <small>
+            Copyright &#169; 2017<br>
+            Powered by <a href="http://gohugo.io/" target="_blank">Hugo</a> &amp; <a href="https://github.com/azmelanar/hugo-theme-pixyll" target="_blank">Pixyll</a>
+          </small>
+        </div>
+      </div>
+    </footer>
+
+    
+    <script src="../../js/highlight.pack.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+
+    
+    
+
+
+</body>
+</html>
+
