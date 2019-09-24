@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Deploying to Cloud with DigitalOcean &#43; Docker - Colin Riddell</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <meta name="keywords" content="">
+  <link rel="canonical" href="https://colin-riddell.github.io/post/docker-intro-with-do/">
+
+  
+  
+
+  
+  
+
+  
+  
+
+  <link rel="stylesheet" type="text/css" href="https://colin-riddell.github.io/css/combined-min.css">
+  <link rel="stylesheet" type="text/css" href="https://colin-riddell.github.io/tipuesearch/tipuesearch.css">
+
+</head>
+<body class="">
+
+<div class="site-wrap">
+  <header class="site-header px2 px-responsive">
+  <div class="mt2 wrap">
+    <div class="measure">
+      <a href="https://colin-riddell.github.io" class="site-title">Colin Riddell</a>
+      <nav class="site-nav right">
+      <a href="https://colin-riddell.github.io/about/">About</a>
+<a href="https://colin-riddell.github.io/tags/">Tags</a>
+<a href="https://colin-riddell.github.io/contact/">Contact</a>
+</form>
+
+      </nav>
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</header>
+
+  <div class="post p2 p-responsive wrap" role="main">
+    <div class="measure">
+      <div class="post-header mb2">
+        <h1 class="py2">Deploying to Cloud with DigitalOcean &#43; Docker</h1>
+        <span class="post-meta">Sep 19, 2019 by Colin</span><br>
+        
+      </div>
+
+      <article class="post-content">
+      
+
+<p>Containerization allows development teams to move fast, deploy software efficiently, and operate at an unprecedented scale.</p>
+
+<hr />
+
+<ul>
+<li>They are small</li>
+<li>They are fast</li>
+<li>They consume no more engergy than running an application</li>
+<li>They take up 100&rsquo;s of times less space and memory than virtual machines</li>
+</ul>
+
+<h2 id="setup">Setup</h2>
+
+<h3 id="optional-get-a-do-account"><em>Optional</em> Get a DO account</h3>
+
+<p><a href="https://m.do.co/c/e224d565e5ec" target="_blank">https://m.do.co/c/e224d565e5ec</a> - this link gives 100 USD credit.</p>
+
+<h3 id="install-docker-do-before-starting">Install Docker - do before starting</h3>
+
+<p><a href="https://docs.docker.com/docker-for-mac/install/" target="_blank">Docker Download - Mac</a></p>
+
+<p>OR</p>
+
+<pre><code class="language-bash">
+curl https://download.docker.com/mac/stable/Docker.dmg --output Docker.dmg &amp;&amp; open Docker.dmg
+
+</code></pre>
+
+<h2 id="get-started-docker">Get Started - Docker</h2>
+
+<h3 id="what-is-docker">What is Docker</h3>
+
+<p>Docker is a container engine application that runs on Mac, Windows and Linux that allows us to run Containers</p>
+
+<h3 id="what-are-containers">What are containers?</h3>
+
+<p>Containers are operating systems that run virtually within a host system such as Linux, Mac or Windows. Host systems are typically servers in the cloud or development laptops running locally.</p>
+
+<p>Containers are typically very small taking up just enough memory and disk space to perform their function.</p>
+
+<p>They are ephemeral, meaning they are designed to be short-lived and never permanent.</p>
+
+<p>These small short-lived operating systems are for running processes on the host in such a way that the host doesn&rsquo;t need to know about or provide any of the dependencies of the application directly.</p>
+
+<p>For example if we wish to run an express.js application there are two choices. Without the container (as normal) - where we&rsquo;d need to install the dependencies on the host machine (server, laptop etc). Or with a container where the dependencies would be installed in the container.</p>
+
+<p>Running an application in a container vs running on the host gives consistency between running all the various places that app might need to run. We might need to run something on several dev&rsquo; machines, test servers, integration servers and one or more production servers.</p>
+
+<p>Since containers are small environments for our applications to run, we can use containers to scale the application horizontally.</p>
+
+<h3 id="what-are-containers-technically">What are containers: Technically</h3>
+
+<p>To understand what containers <em>are</em> we need to understand a little Linux. The Linux OS is as simple as:</p>
+
+<ul>
+<li>A filesystem (files)</li>
+<li>A kernel (core process)</li>
+<li>Processes (running applications)</li>
+</ul>
+
+<p>A container is all of these things running together virtually to give the <em>illusion</em> that they are running on a separate intependent operating system.</p>
+
+<h4 id="how">How?</h4>
+
+<h5 id="chroot">chroot</h5>
+
+<p>The linux kernel supports mapping a filesystem within a filesystem to a specific process as a particular user.</p>
+
+<h5 id="cgroups">cgroups</h5>
+
+<p>cgroups, short for control groups, allow kernel imposed isolation on resources like memory and CPU. After all, what’s the point of isolating processes they can still kill neighbors by hogging RAM.</p>
+
+<h5 id="nsenter">nsenter</h5>
+
+<p>We need networking. NSEnter works with the kernel to help create virtual networking namespaces.</p>
+
+<h2 id="docker">Docker</h2>
+
+<p><strong>Docker</strong> makes use of all these system-level tools to create contained systems that run within the host, but are isolated completely from the host and other containers.</p>
+
+<p>Docker brings together a lot more than <code>chroot</code>, <code>cgroups</code> and <code>nsenter</code> - but these alone are enough to give the basis of running an Operating System within an Operating System.</p>
+
+<h3 id="running-a-container">Running a container</h3>
+
+<pre><code>docker run -it ubuntu bash
+</code></pre>
+
+<p>This is the docker run command.
+<code>-it</code> is <code>-i</code> and <code>-t</code>.  <code>-i</code> asks for network access from the host and <code>-t</code> asks for a terminal command to be run.</p>
+
+<p><code>ubuntu</code> is the <strong>image</strong> we wish to use. Docker pulls common images from the online Docker Registry. This is a repository of official images that people contribute docker images of various Operating Systems and applications. Nearly every application you can imagine has a Docker image on there.</p>
+
+<p><code>bash</code> is the command we wish to run. This simply runs the <code>bash</code> shell.
+<strong>Why not run zsh</strong> - it&rsquo;s common practice to run bash as it&rsquo;s universally available on nearly every Linux distribution.</p>
+
+<p><strong>Running that command&hellip;</strong> we&rsquo;re now in a container. Wasn&rsquo;t that fast? We can do whatever we want here :)</p>
+
+<h2 id="node-in-container">Node in container</h2>
+
+<h3 id="running-without-container">Running without container</h3>
+
+<p>Running an express.js application without docker is as how we would run it normally.</p>
+
+<pre><code class="language-bash">npm start # in the server
+
+mongod # in a separate tab
+npm run serve   #in the client directory
+
+</code></pre>
+
+<p>This is fine when we&rsquo;re developing locally.. but even in that case we have three tabs to run one application.</p>
+
+<p>Docker containers allow us to do this more easily.</p>
+
+<h3 id="with-a-container">With a container</h3>
+
+<pre><code>docker run -it --rm --name auth_app -v &quot;$PWD&quot;:/usr/src/auth_app -w /usr/src/auth_app node:8 npm install; npm start
+</code></pre>
+
+<p>In another tab we can do <code>docker ps</code> (docker list running containers), to see it running.</p>
+
+<p>This will work, but then fail to connect to the MongoDB.</p>
+
+<p>To solve this we could open another tab then do another long run command to find a mongod image, pull that and run it, but we might still have issues with that and typing these huge run commands isn&rsquo;t nice.</p>
+
+<p><strong>Ideally, we&rsquo;d have each thing in its own container. The back-end, the front-end and the mongodb</strong></p>
+
+<h2 id="images">Images</h2>
+
+<p>To save us from typing really long commands to use the Docker API, we can use a more script-like code to create containers. To create containers we first need to make a docker <strong>image</strong></p>
+
+<h2 id="images-vs-containers">Images vs Containers</h2>
+
+<p><strong>What&rsquo;s the difference between a container and an image - in docker?</strong></p>
+
+<p><strong>Docker Container</strong> is a <em>running</em> docker <strong>image</strong>.</p>
+
+<p>thus</p>
+
+<p><strong>Docker Image</strong> is like a blueprint for a container. It is literally just a zip (actually <code>tar.gz</code>) of the filesystem that the container should use.</p>
+
+<h3 id="creating-an-image">Creating an Image</h3>
+
+<p>The <strong>Dockerfile</strong> gives us a way to script the creation of an <strong>image</strong>.</p>
+
+<p>Let&rsquo;s create our first Dockerfile to run the bucket list app.</p>
+
+<p>At the same level as the <code>package.json</code> in the bucket list node project:</p>
+
+<pre><code class="language-Dockerfile">#Dockerfile
+FROM node:8
+
+WORKDIR /usr/src/auth-app/
+
+COPY . .
+
+RUN npm install
+
+EXPOSE 3000
+
+CMD [ &quot;npm&quot;, &quot;start&quot; ]
+
+</code></pre>
+
+<h4 id="dockerfile-commands-broken-down">Dockerfile commands broken down</h4>
+
+<ul>
+<li><code>FROM node:8</code> - Docker allows us to create images but use other images as the starting point. You can think of this as being <em>like</em> inheriting between images.  If we use the official node.js as our <em>base image</em>, then we will get a container that already has node installed, specifically version <strong>8</strong></li>
+<li><code>WORKDIR</code> - We need this to specify a default working directory <strong>in the container</strong>, not on the host machine. Once this is set, that means the <code>.</code> or the <code>pwd</code> in the container is set to this location. When the container starts it will start in this directory. If that directory doesn&rsquo;t exist it will be created.</li>
+<li><code>COPY &lt;src&gt; &lt;dest&gt;</code> - Is used to copy files <strong>from the host to the container</strong>. <code>&lt;src&gt;</code> is a location on the host. <code>&lt;dest&gt;</code> is a location on the container. We use <code>.</code> as we&rsquo;ve already set a <code>WORKDIR</code>.</li>
+<li><code>RUN npm install</code> - Runs the given command on the container as part of the <strong>build</strong> process for creating that image. This is not to be confused with <code>CMD</code> which sets up a command to run when the container is launched. We can have as many <code>RUN</code> lines as we require. It&rsquo;s very common to have <code>RUN</code> lines that install dependencies.</li>
+<li><code>EXPOSE 3000</code> - By default containers have all their I/O including networking shut off from the host and other containers. Our node app will run on 3000, so we open 3000 in order to see it working.</li>
+<li><code>CMD [ &quot;npm&quot;, &quot;start&quot; ]</code> - This is where we specify the container <strong>entrypoint</strong>. This is what&rsquo;s run when the container starts. Remember if a container&rsquo;s <code>CMD</code> is simply <code>ls</code> it will just run that command and exit. If it&rsquo;s something like a web server it will run that while the container is running. <strong>As soon as the process started by <code>CMD</code> exits, the container also exits.</strong></li>
+</ul>
+
+<h3 id="exclude-the-node-modules-from-being-copied">Exclude the <code>node_modules</code> from being copied</h3>
+
+<p>Cretate a <code>dockerignore</code> file and add - we don&rsquo;t want</p>
+
+<pre><code>node_modules
+</code></pre>
+
+<h3 id="buidling-running-the-dockerfile">Buidling + Running the Dockerfile</h3>
+
+<p>We can build that Dockerfile into an image called <code>bucket_list</code> with the command:</p>
+
+<pre><code class="language-bash">docker build . -t auth-app
+</code></pre>
+
+<p>We should be able to see the image listed when we do <code>docker images</code>.</p>
+
+<p>To run the resulting image:</p>
+
+<pre><code class="language-bash">docker run -p3000:3000 auth-app
+</code></pre>
+
+<p><strong>Why did you need to specify the port?</strong>
+The port setting we specified in the Dockerfile is just the one we want to ensure the image will allow us to expose. We still need to ask the run command to expose it.</p>
+
+<p><a href="http://localhost:3000/" target="_blank">http://localhost:3000/</a> should now have the running app. <strong>But we still need a MongoDB database</strong>. We&rsquo;ll look at doing this in the next section&hellip;</p>
+
+<h2 id="multiple-containers">Multiple containers</h2>
+
+<p>We <em>could</em> create a MongoD Dockerfile and create a container for it like that, but that requires us to run two containers at the same time in different tabs&hellip; so let&rsquo;s instead use <code>docker-compose</code>.</p>
+
+<p><strong>docker-compose</strong> allows us to create a scheme in <code>yaml</code> to orchistrate the running of multiple containers and be able to turn them all of, or all on at the same time. This way, we could &laquo;spin up&raquo; our mongod, client and server in one command.</p>
+
+<p><strong>docker-compose</strong> lets us build images and start containers through one nice easy to use command line tool and an easy to understand yaml configuration.</p>
+
+<p>We still use Dockerfiles..</p>
+
+<p>Let&rsquo;s build a docker-compose.</p>
+
+<pre><code class="language-yaml">#docker-compose.yml
+version: '3.1'
+
+services:
+  auth_server:
+    container_name: 'auth_server'
+    ports:
+      - 3000:3000
+    build: ./server/
+    links:
+       - mongoservice
+    restart: on-failure
+
+  mongoservice:
+    image: mongo:latest
+    container_name: &quot;mongoservice&quot;
+    environment:
+      - MONGO_DATA_DIR=/data/db
+      - MONGO_LOG_DIR=/dev/null
+    volumes:
+     - ./data/db:/data/db
+    ports:
+      - 27017:27017
+    command: mongod --smallfiles
+    restart: on-failure
+
+</code></pre>
+
+<p>File structure changes to support <code>docker-compose</code> microservices.</p>
+
+<p>Let&rsquo;s make a new directory called <code>services</code>, <code>client</code>, <code>server</code> and <code>docker-compose.yml</code> into it.</p>
+
+<pre><code>.
+└── services
+    ├── client
+    │   ├── README.md
+    │   ├── babel.config.js
+    │   ├── node_modules
+    │   ├── package-lock.json
+    │   ├── package.json
+    │   ├── postcss.config.js
+    │   ├── public
+    │   └── src
+    ├── docker-compose.yml
+    └── server
+        ├── Dockerfile
+        ├── models
+        ├── node_modules
+        ├── package-lock.json
+        ├── package.json
+        └── server.js
+
+</code></pre>
+
+<p>Keeping the <code>docker-compose</code> at a level higher than the services that it uses means it&rsquo;s easier to add more services later on, and have docker-compose orchestrate them all.</p>
+
+<h3 id="run-it">Run it</h3>
+
+<p><code>docker-compose build</code> now builds all our images. Looks through any services in the docker-compose file that have a <code>build</code> attribute and builds them accordingly.</p>
+
+<p>In our case it just builds the Dockerfile we&rsquo;ve pointed out in <code>./bucket_list_service/</code> directory as the place to build the image for the bucket_list_service.</p>
+
+<p>For mongodb, we&rsquo;re using the vanilla official mongo docker image which is already built for us. So we can just ask to pull and use that.</p>
+
+<p><code>docker-compose up</code> is the command we use to ask it to run all these containers at once.</p>
+
+<p><strong>We now find some problems when starting the app.</strong></p>
+
+<p>These are:</p>
+
+<ul>
+<li>The bucket_list_service starts really quickly and tries to connect to mongodb before it&rsquo;s even ready!</li>
+<li>The bucket_list_service doesn&rsquo;t find the mongodb service at all.</li>
+</ul>
+
+<p><strong>We can fix these by doing:</strong></p>
+
+<p>In <code>server.js</code> we need to ask node.js to exit when it doesn&rsquo;t connect to mongodb. Doing this means <strong>the container will fail too.</strong> Then it should immediately restart becuase we have <code>restart: on-failure</code> option on that service outline in <code>docker-compose.yml</code>.
+Doing this it does restart each time, but we still have problems finding it all.</p>
+
+<p>We will fix this in the next section!</p>
+
+<h2 id="networking-with-docker">Networking with Docker</h2>
+
+<p>When we have multiple containers Docker creates a virual network for them all to find each-other. We do still need to explicitly link them, but the network is created even if there are no links.</p>
+
+<h3 id="containers-have-domain-names">Containers have domain names</h3>
+
+<p>Very useful that we don&rsquo;t need to know the ip of a container, instead Docker gives it a domain name available within it&rsquo;s own virtual network. The name is based on the provided <code>container_name</code>. In our case <code>bucket_list_service</code>.</p>
+
+<p>If we look into <code>server.js</code>, the express app is still trying to connect to mongodb locally ( on <code>localhost</code>). <strong>localhost</strong> now means that individual container&hellip; but our mongod runs in a separate container.</p>
+
+<pre><code class="language-javascript">// server.js
+mongoose.connect('mongodb://localhost:27017/signups')
+</code></pre>
+
+<p>There is no MongoDB server running on localhost within that container, so we need to ask it to connect to the <code>mongoservice</code> container instead.</p>
+
+<p>Change this to:</p>
+
+<pre><code class="language-javascript">// server.js
+mongoose.connect('mongodb://mongoservice:27017/signups')
+
+</code></pre>
+
+<p>Build:</p>
+
+<pre><code class="language-bash">docker-compose build
+</code></pre>
+
+<p>Launch:</p>
+
+<pre><code class="language-bash">docker-compose up
+</code></pre>
+
+<h4 id="other-docker-compose-options">Other Docker Compose options</h4>
+
+<p>It&rsquo;s possible to run docker-compose in detached mode:</p>
+
+<pre><code class="language-bash">docker-compose up -d
+</code></pre>
+
+<p>It&rsquo;s possible to ask it to build before bring-up:</p>
+
+<pre><code class="language-bash">docker-compose up --build -d
+</code></pre>
+
+<p>Once some containers are running in docker-compose we can see them and check their status:</p>
+
+<pre><code class="language-bash">docker-compose ps
+</code></pre>
+
+<p>it will show output like:</p>
+
+<pre><code>       Name                      Command               State            Ports
+---------------------------------------------------------------------------------------
+bucket_list_service   npm start                        Up      0.0.0.0:3000-&gt;3000/tcp
+mongoservice          docker-entrypoint.sh mongo ...   Up      0.0.0.0:27017-&gt;27017/tcp
+</code></pre>
+
+<p>To bring containers down:</p>
+
+<pre><code class="language-bash">docker-compose down
+
+</code></pre>
+
+<p>Try it:
+<a href="http://localhost:3000/" target="_blank">http://localhost:3000/</a> IT WORKS!</p>
+
+<p>We can still connect to the mongodb with Compass as if it were on <code>localhost</code>.</p>
+
+<hr />
+
+<h2 id="recap-so-far">Recap so far</h2>
+
+<p>So far we&rsquo;ve managed to:</p>
+
+<ul>
+<li><strong>Learned that containers are small operating systems running independently within a host.</strong></li>
+<li><strong>Create a  docker image for our bucket-list express app.</strong></li>
+<li><strong>Create a docker-compose that allows building and running of the bucket-list image along with a pre-built mongod image.</strong></li>
+</ul>
+
+<h2 id="run-the-front-end-server-in-a-container">Run the front-end server in a container</h2>
+
+<p>We need somewhere to serve the front-end from. For this we have a couple of options:</p>
+
+<ul>
+<li>use express static serve to serve it from where the back-end runs. This is a nice solution, as it doesn&rsquo;t cause any CORS issues, but not increddibly robust.</li>
+<li>Serve it on a totally different server on a different domain. This is common practice these days but will lead to CORS issues that we&rsquo;ll need to configure around in the server.</li>
+<li>Host it in another container on our machine using NGINX</li>
+</ul>
+
+<h2 id="nginx">NGINX</h2>
+
+<p><strong>Nginx</strong> is a hiligly configurable web-server. It&rsquo;s a very robust server for use in production environments for many different things. We will run a Docker container with NGINX running in it. We&rsquo;ll give it the static files from our front-end to serve up from there.</p>
+
+<pre><code>#docker-compose.yml
+nginx:
+    image: nginx:latest
+    container_name: nginx
+    restart: always
+    volumes:
+      - ./client/dist/:/usr/share/nginx/html
+    ports:
+      - 8080:80
+
+</code></pre>
+
+<p>The location <code>/usr/share/nginx/html</code> is where the nginx container will serve its static web content from.</p>
+
+<p>We therefore need to put our built Vue app into <code>./client/dist</code> so that it can be served into that container under <code>/usr/share/nginx/html</code> - which will be picked up by nginx and hosted from there under port <code>80</code>.</p>
+
+<p><strong>Now</strong> brining the services down, re-building, and <strong>updating</strong> them will launch the nginx container, too.</p>
+
+<pre><code>docker-compose down
+docker-compose build
+docker-compose up -d
+</code></pre>
+
+<p>We should be able to go to <code>localhost:8081</code> - but this won&rsquo;t show anything as it&rsquo;s not got anything populated in the host folder.</p>
+
+<pre><code>cd client
+npm run build
+</code></pre>
+
+<p>This will put the built client code into <code>dist</code>. From here it will be picked up by the nginx container so it can get hosted.</p>
+
+<p><strong>Update the running container</strong> We need to restart <strong>nginx</strong> for this to work.. so now do</p>
+
+<pre><code>docker-compose down
+docker-compose build
+docker-compose up -d
+</code></pre>
+
+<p>Refresh <code>http://localhost:8081</code>.</p>
+
+<h2 id="update-the-front-end-to-point-to-the-containers-rather-than-localhost">Update the front-end to point to the containers rather than localhost</h2>
+
+<hr />
+
+<h2 id="configuration-managment-deployment">Configuration Managment + Deployment</h2>
+
+<p>We&rsquo;ve got a few problems to solve before we think about deploying this to DigitalOcean.</p>
+
+<ul>
+<li>We need to change the <code>MongoClient.connect('mongodb://mongoservice:27017')
+</code> line depending on whether we&rsquo;re developing or deploying to production.</li>
+<li>We need to ensure that the webpack bundler has done it&rsquo;s job so the bundle is up to date.</li>
+<li>We need something that will help us actually ask our remote server to build and run the containers remotely.</li>
+</ul>
+
+<p>We can solve these problems with <strong>Configuration Management</strong> We will specifically use <strong>Ansible Playbook</strong>.</p>
+
+<p>Ansible is a tool for doing exactly that. It allows us to run commands remotely on a remote server. Just needs SSH.</p>
+
+<p>First we need somewhere to run this.. lets use Digital Ocean..</p>
+
+<h3 id="setting-up-a-new-droplet">Setting up a new &lsquo;Droplet&rsquo;</h3>
+
+<p><strong>Add our ssh key to DigitalOcean</strong>
+* Click avatar top right &gt; Account
+* Security &gt; SSH keys &gt; Add SSH Key
+* <code>pbcopy &lt; ~/.ssh/id_rsa.pub</code> and paste into window on Digital Ocean
+* Give name and save.</p>
+
+<p><strong>Creating the droplet</strong></p>
+
+<p>In the DO Dashboard do:</p>
+
+<ul>
+<li>Create &gt; Droplet</li>
+<li>One-click-apps &gt; Docker</li>
+<li>Choose a size &gt; $5/month</li>
+<li>Choose a region &gt; London</li>
+<li>Add SSH Key</li>
+<li>Choose a hostname &gt;  pick something better</li>
+<li>Press Create</li>
+<li>It will take a minute to create.</li>
+<li>Copy the IP Address once it&rsquo;s ready</li>
+</ul>
+
+<p><strong>Connect remotely and setup a user</strong></p>
+
+<p>We now need to remote into that droplet and check it has everything we need.</p>
+
+<pre><code class="language-bash">ssh root@&lt;your droplets IP&gt;
+</code></pre>
+
+<p>Check we have docker installed with <code>docker</code> and <code>docker-compose</code>. Looks good.</p>
+
+<p><strong>We will now add a user who has the correct privelages</strong></p>
+
+<ul>
+<li><code>adduser appuser</code></li>
+<li>Put in a password but nothing else, just press enter&hellip;</li>
+<li><code>usermod -aG sudo appuser</code></li>
+<li><code>su - appuser</code>  - become appuser for a minute</li>
+<li><code>sudo ls -la /root</code> - enter the password and should list stuff - all good.</li>
+<li><code>exit</code> - back to root user</li>
+<li><code>cp -r /root/.ssh /home/appuser</code></li>
+<li><code>chown -R appuser:appuser ~appuser/.ssh</code> - copy the key to the user</li>
+<li><code>exit</code></li>
+<li>We should now be able to <code>ssh appuser@&lt;droplet ip&gt;</code> and get in without any hassle.</li>
+</ul>
+
+<p><strong>Install ansible</strong></p>
+
+<ul>
+<li><code>sudo apt update</code></li>
+<li><code>sudo apt install software-properties-common</code></li>
+<li><code>sudo apt-add-repository ppa:ansible/ansible</code> - press enter</li>
+<li><code>sudo apt update</code></li>
+<li><code>sudo apt install ansible</code></li>
+<li><code>sudo apt intstall python python-pip</code></li>
+</ul>
+
+<p><strong>Enable docker for appuser</strong></p>
+
+<ul>
+<li><code>sudo usermod -aG docker ${USER}</code></li>
+</ul>
+
+<p><strong>Create the ansible config locally</strong></p>
+
+<p>Create a directory called <code>deployment</code>. We will put all deployment related configs in here.</p>
+
+<p>In deployment create a <code>bucketlistservice.yml</code>.</p>
+
+<pre><code class="language-yaml">
+- hosts: bucketlistbackend
+  tasks:
+    - name: Copy app-services files across
+      synchronize:
+        src: ../services/
+        dest: /home/appuser/services
+        mode: push
+        rsync_opts:
+            - &quot;--exclude=node_modules&quot;
+
+    - name: Bring up the rest of the services
+      command: docker-compose up -d --build
+      args:
+        chdir: /home/appuser/services/
+
+</code></pre>
+
+<p>Create a <code>hosts</code> file in the <code>deployment</code> directory (same directory as the <code>bucketlistservice.yml</code>.</p>
+
+<pre><code>[bucketlistbackend]
+&lt;your server's ip&gt;
+</code></pre>
+
+<p><strong>Deploy with Ansible</strong></p>
+
+<pre><code class="language-bash">ansible-playbook -i hosts -u appuser bucketlistservice.yml
+</code></pre>
+
+<p>Now check the app is working: <code>&lt;server ip&gt;:3000</code> in the browser.</p>
+
+      </article>
+
+      <p class="post-meta">Tags:&nbsp;
+        
+            
+            <a href="https://colin-riddell.github.io/tags/docker">docker</a>
+        
+            ,&nbsp;
+            <a href="https://colin-riddell.github.io/tags/DigitalOcean">DigitalOcean</a>
+        
+            ,&nbsp;
+            <a href="https://colin-riddell.github.io/tags/cloud">cloud</a>
+        
+            ,&nbsp;
+            <a href="https://colin-riddell.github.io/tags/devops">devops</a>
+        
+      </p>
+
+      
+
+    </div>
+  </div>
+</div>
+    <footer class="footer">
+      <div class="p2 wrap">
+        <div class="measure mt1 center">
+      <nav class="social-icons icons">
+<a class="fa fa-rss rss" href="../../index.xml"></a>
+
+<a class="fa fa-twitter twitter" href="https://twitter.com/colin_riddell"></a>
+
+</nav>
+
+          <small>
+            Copyright &#169; 2017<br>
+            Powered by <a href="http://gohugo.io/" target="_blank">Hugo</a> &amp; <a href="https://github.com/azmelanar/hugo-theme-pixyll" target="_blank">Pixyll</a>
+          </small>
+        </div>
+      </div>
+    </footer>
+
+    
+    <script src="../../js/highlight.pack.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+
+    
+    
+
+
+</body>
+</html>
+

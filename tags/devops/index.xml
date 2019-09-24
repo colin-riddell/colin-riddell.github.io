@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>devops on Colin Riddell</title>
+    <link>https://colin-riddell.github.io/tags/devops/</link>
+    <description>Recent content in devops on Colin Riddell</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 19 Sep 2019 18:19:14 +0100</lastBuildDate>
+    
+	<atom:link href="https://colin-riddell.github.io/tags/devops/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Deploying to Cloud with DigitalOcean &#43; Docker</title>
+      <link>https://colin-riddell.github.io/post/docker-intro-with-do/</link>
+      <pubDate>Thu, 19 Sep 2019 18:19:14 +0100</pubDate>
+      
+      <guid>https://colin-riddell.github.io/post/docker-intro-with-do/</guid>
+      <description>Containerization allows development teams to move fast, deploy software efficiently, and operate at an unprecedented scale.
+ They are small They are fast They consume no more engergy than running an application They take up 100&amp;rsquo;s of times less space and memory than virtual machines  Setup Optional Get a DO account https://m.do.co/c/e224d565e5ec - this link gives 100 USD credit.
+Install Docker - do before starting Docker Download - Mac</description>
+    </item>
+    
+  </channel>
+</rss>

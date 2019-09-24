@@ -1,0 +1,51 @@
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+      <title> on Colin Riddell </title>
+      <generator uri="https://gohugo.io">Hugo</generator>
+    <link>https://colin-riddell.github.io/</link>
+    <language>en-us</language>
+    
+    
+    <updated>Wed, 18 Sep 2019 18:38:07 BST</updated>
+    
+    <item>
+      <title>Deploying to Cloud with DigitalOcean &#43; Docker</title>
+      <link>https://colin-riddell.github.io/post/docker-intro-with-do/</link>
+      <pubDate>Thu, 19 Sep 2019 18:19:14 BST</pubDate>
+      
+      <guid>https://colin-riddell.github.io/post/docker-intro-with-do/</guid>
+      <description>Containerization allows development teams to move fast, deploy software efficiently, and operate at an unprecedented scale.
+ They are small They are fast They consume no more engergy than running an application They take up 100&amp;rsquo;s of times less space and memory than virtual machines  Setup Optional Get a DO account https://m.do.co/c/e224d565e5ec - this link gives 100 USD credit.
+Install Docker - do before starting Docker Download - Mac</description>
+    </item>
+    
+    <item>
+      <title>About</title>
+      <link>https://colin-riddell.github.io/about/</link>
+      <pubDate>Sat, 08 Nov 2014 16:42:18 &#43;0400</pubDate>
+      
+      <guid>https://colin-riddell.github.io/about/</guid>
+      <description>Put CV / intro to me here</description>
+    </item>
+    
+    <item>
+      <title>Contact</title>
+      <link>https://colin-riddell.github.io/contact/</link>
+      <pubDate>Sat, 08 Nov 2014 16:42:18 &#43;0400</pubDate>
+      
+      <guid>https://colin-riddell.github.io/contact/</guid>
+      <description>how to get me</description>
+    </item>
+    
+    <item>
+      <title>Resumè</title>
+      <link>https://colin-riddell.github.io/resume/</link>
+      <pubDate>Sat, 08 Nov 2014 16:42:18 &#43;0400</pubDate>
+      
+      <guid>https://colin-riddell.github.io/resume/</guid>
+      <description>My Resumè</description>
+    </item>
+    
+  </channel>
+</rss>
+
