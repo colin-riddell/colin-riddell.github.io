@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Posts on Colin Riddell</title>
-    <link>https://colin-riddell.github.io/post/</link>
-    <description>Recent content in Posts on Colin Riddell</description>
+    <title>asynchronous on Colin Riddell</title>
+    <link>https://colin-riddell.github.io/tags/asynchronous/</link>
+    <description>Recent content in asynchronous on Colin Riddell</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Tue, 24 Sep 2019 21:52:10 +0100</lastBuildDate>
     
-	<atom:link href="https://colin-riddell.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://colin-riddell.github.io/tags/asynchronous/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
@@ -20,17 +20,6 @@
       <description>Scala is a functional programming language.
 For years, I&amp;rsquo;ve always shied away from functional programming languages. I&amp;rsquo;ve done that because I always thought they were only really used by hard-core academic computer scientists to make themselves sound intelligent in front of others.
 I&amp;rsquo;ve found out recently there are some really fun and powerful things to be learned from functional languages, such as Scala. They&amp;rsquo;re fast, good for asynchronous operations, have low latency and because of that they are becoming more prevalent and sought after to meet the real-time, low-latency demands of today.</description>
-    </item>
-    
-    <item>
-      <title>Deploying to Cloud with DigitalOcean &#43; Docker</title>
-      <link>https://colin-riddell.github.io/post/docker-intro-with-do/</link>
-      <pubDate>Thu, 19 Sep 2019 18:19:14 +0100</pubDate>
-      
-      <guid>https://colin-riddell.github.io/post/docker-intro-with-do/</guid>
-      <description>Containerization allows development teams to move fast, deploy software efficiently, and operate at an unprecedented scale.
- They are small They are fast They consume no more engergy than running an application They take up 100&amp;rsquo;s of times less space and memory than virtual machines  Setup Optional Get a DO account https://m.do.co/c/e224d565e5ec - this link gives 100 USD credit.
-Install Docker - do before starting Docker Download - Mac</description>
     </item>
     
   </channel>

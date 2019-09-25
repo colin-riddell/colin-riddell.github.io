@@ -53,15 +53,13 @@
       <article class="post-content">
       
 
-<p>Scala is a functional programming langugage.</p>
+<p>Scala is a functional programming language.</p>
 
-<p>For years, I&rsquo;ve always shied away from functional programming languages. I&rsquo;ve done that becuase I always thought they were only really used by hard-core academic <em>computer scientists</em> to make themselves sound intelligent in front of others.</p>
+<p>For years, I&rsquo;ve always shied away from functional programming languages. I&rsquo;ve done that because I always thought they were only really used by hard-core academic <em>computer scientists</em> to make themselves sound intelligent in front of others.</p>
 
-<p>I&rsquo;ve found out recently there are some really fun and powerful things to be learned from functional languages, such as Scala. They&rsquo;re fast, good for asynchronous operations, have low latency and because of that they are becoming more prevelant and sought after to meet the real-time, low-latency demands of today.</p>
+<p>I&rsquo;ve found out recently there are some really fun and powerful things to be learned from functional languages, such as Scala. They&rsquo;re fast, good for asynchronous operations, have low latency and because of that they are becoming more prevalent and sought after to meet the real-time, low-latency demands of today.</p>
 
 <p>ReactiveX, Observables and event-driven architectures are all important technologies and concepts we can&rsquo;t ignore - and they borrow from functional programming.</p>
-
-<p><img src="http://reactivex.io/assets/Rx_Logo_S.png" alt="http://reactivex.io" /></p>
 
 <p>I&rsquo;m going to learn more about functional languages and share what strikes me as interesting about them, as I try to pick them up.</p>
 
@@ -70,7 +68,7 @@
  \_____  \_/ ___\\__  \ |  | \__  \  
  /        \  \___ / __ \|  |__/ __ \_
 /_______  /\___  &gt;____  /____(____  /
-        \/     \/     \/          \/ 
+        \/     \/     \/          \/
 </code></pre>
 
 <h2 id="why-scala">Why Scala</h2>
@@ -83,8 +81,6 @@
 
 <p>Scala runs on the Java Virtual Machine - before you get your pitchfork out, just, let me explain. Applications running on the JVM are not slow. The JVM merely has a slow startup time. Execution of code once the JVM has fired up is relatively fast.</p>
 
-<p>It&rsquo;s important to not mistake an applications startup time as meaning that the technology or programming language it was written in is slow. Compared to bare-metal, it of-course doesn&rsquo;t compare, but studies do show Scala is faster than Go and Java. (Hundt, 2011 - <a href="https://days2011.scala-lang.org/sites/days2011/files/ws3-1-Hundt.pdf" target="_blank">link</a> )</p>
-
 <p><img src="https://jazzy.id.au/images/blogs/javascalabenchmark/scalavsjava.png" alt="" />
 (DZone, 2012, <a href="https://dzone.com/articles/benchmarking-scala-against" target="_blank">https://dzone.com/articles/benchmarking-scala-against</a>)</p>
 
@@ -94,17 +90,66 @@
 
 <p>Think of a promise as being like a note with your order number on it that you get when you order a coffee in a café. You&rsquo;re very seldom handed your order immediately, so while it&rsquo;s being made they give you a note. A note that <em>promises</em> that you&rsquo;ll be given your coffee when it&rsquo;s ready.</p>
 
-<p>Promises and <em>futures</em> allow operations to happen asynchronously in a non-blocking way freeing the main thread to do something else. You see this on the web, a spinner loading icon will be rendered <strong>while</strong> the data is being fetched asynchronously. Without non-blocking asynchronous calls everything would freeze until it was loaded.</p>
+<p>With Scala, since it&rsquo;s working on the back-end the asynchronous stuff happens when doing some database transactions, or making further requests to other services.</p>
 
-<p>With Scala, since it&rsquo;s working on the back-end the asynchronus stuff happens when doing some database transactions, or making further requests to other services.</p>
+<h2 id="scala-is-functional-and-object-orientated-language">Scala is functional and Object Orientated language</h2>
 
-<h3 id="scala-is-functional-and-oo">Scala is functional and OO</h3>
+<p>Scala allows you to do functional programming. This is a function that takes a number and adds one to it. It&rsquo;s assigned to the variable <code>addOne</code></p>
 
-<p>Scala allows you to do functional programming</p>
-
-<pre><code class="language-scala">def add(a:Int,b:Int) = { a + b }
-
+<pre><code class="language-scala">var addOne = (x: Int) =&gt; x + 1
 </code></pre>
+
+<p>Some things I noticed when playing around with simple functions like this in <strong>scala</strong></p>
+
+<ul>
+<li><strong>A function definition must be assigned to something to be useful.</strong> It&rsquo;s possible to have the <code>(x: Int) =&gt; x + 1</code> as an unnamed function, but that on its own isn&rsquo;t useful and the compiler gives a warning
+<code>a pure expression does nothing in statement position</code>.</li>
+<li><strong>You can do multi-line functions brackets {}.</strong> Wrapping the code to the right of the <code>=&gt;</code> in a block gives us the ability to do multi-line functions.. But I get the impression that it&rsquo;s <strong>not cool</strong> to use them!
+<iframe height="200px" frameborder="0" style="width: 100%" src="https://embed.scalafiddle.io/embed?sfid=JXnfQGX/1&layout=h58"></iframe></li>
+</ul>
+
+<!--```scala
+var addOne = (x: Int) => {
+  printf("this is my multi-line scala function")
+  x + 1
+}
+
+```-->
+
+<ul>
+<li><strong>Brackets {} in multi-line functions are not needed</strong> But I think it looks nasty without them.</li>
+<li><strong>The last expression in a function is implicitly returned</strong> Being new to functional languages, I don&rsquo;t yet know if this a typically functional thing, or if it&rsquo;s a Scala only thing. But in our above code, as <code>x+1</code> is the first and last expression in that function, it&rsquo;s returned.  If we had something like the following, the result is 75, as the result of the last expression is what&rsquo;s returned from the function.
+<iframe height="200px" frameborder="0" style="width: 100%" src="https://embed.scalafiddle.io/embed?sfid=biUc0x4/1"></iframe></li>
+<li><strong>Functions and methods are different</strong>
+
+<ul>
+<li>Functions can&rsquo;t have a <code>return</code> statement. Methods can.</li>
+<li>Functions can&rsquo;t have multiple parameter lists. Methods can.</li>
+<li>Methods can have no parameters at all, if required.</li>
+<li>Methods syntax requires the <code>def</code> keyword and look similar to python or ruby.
+<iframe height="200px" frameborder="0" style="width: 100%" src="https://embed.scalafiddle.io/embed?sfid=eso2fGg/1"></iframe></li>
+</ul></li>
+</ul>
+
+<h3 id="scala-has-classes">Scala has classes</h3>
+
+<p>Classes in scala take their constructor arguments along with the class name</p>
+
+<pre><code class="language-scala">class Greeter(prefix: String, suffix: String) {
+  def greet(name: String): Unit =
+    println(prefix + name + suffix)
+}
+</code></pre>
+
+<p>Objects of a class are instantiated with <code>new</code></p>
+
+<pre><code class="language-scala">val greeter = new Greeter(&quot;Mr&quot;, &quot;Riddell&quot;)
+greeter.greet(&quot;Colin&quot;)
+</code></pre>
+
+<h2 id="scala-seems-fun">Scala Seems fun</h2>
+
+<p>Going to investigate using Scala for web applications and try to learn more about it. In the next part I&rsquo;ll share more findings.</p>
 
       </article>
 
@@ -120,7 +165,7 @@
             <a href="https://colin-riddell.github.io/tags/JVM">JVM</a>
         
             ,&nbsp;
-            <a href="https://colin-riddell.github.io/tags/elixir">elixir</a>
+            <a href="https://colin-riddell.github.io/tags/asynchronous">asynchronous</a>
         
       </p>
 
