@@ -298,19 +298,19 @@ public class SalesController {
 <p>To do that here, we&rsquo;ll look into <code>sales-service/pom.xml</code> and find locate the build secton. Adding an execution to this with the goal name <code>repackage</code> will enable this. The whole build attribute section now looks like this:</p>
 
 <pre><code class="language-xml">&lt;build&gt;
-	&lt;plugins&gt;
-		&lt;plugin&gt;
-			&lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
-			&lt;artifactId&gt;spring-boot-maven-plugin&lt;/artifactId&gt;
-			&lt;executions&gt;                       &lt;!--new--&gt;
-				&lt;execution&gt;                    &lt;!--new--&gt;
-					&lt;goals&gt;                    &lt;!--new--&gt;
-						&lt;goal&gt;repackage&lt;/goal&gt; &lt;!--new--&gt;
-					&lt;/goals&gt;                   &lt;!--new--&gt;
-				&lt;/execution&gt;                   &lt;!--new--&gt;
-			&lt;/executions&gt;                      &lt;!--new--&gt;
-		&lt;/plugin&gt;
-	&lt;/plugins&gt;
+  &lt;plugins&gt;
+    &lt;plugin&gt;
+      &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+	   &lt;artifactId&gt;spring-boot-maven-plugin&lt;/artifactId&gt;
+	   &lt;executions&gt;                       &lt;!--new--&gt;
+	     &lt;execution&gt;                    &lt;!--new--&gt;
+		    &lt;goals&gt;                    &lt;!--new--&gt;
+			   &lt;goal&gt;repackage&lt;/goal&gt; &lt;!--new--&gt;
+			&lt;/goals&gt;                   &lt;!--new--&gt;
+		 &lt;/execution&gt;                   &lt;!--new--&gt;
+		&lt;/executions&gt;                      &lt;!--new--&gt;
+	 &lt;/plugin&gt;
+  &lt;/plugins&gt;
 &lt;/build&gt;
 </code></pre>
 
