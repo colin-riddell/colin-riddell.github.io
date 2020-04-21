@@ -9,6 +9,25 @@
     <updated>Tue, 24 Sep 2019 18:38:07 BST</updated>
     
     <item>
+      <title>Sharing dependencies between Spring Microservices with Maven</title>
+      <link>https://colin-riddell.github.io/post/sharing-dependencies-between-microservices/</link>
+      <pubDate>Tue, 21 Apr 2020 11:29:11 BST</pubDate>
+      
+      <guid>https://colin-riddell.github.io/post/sharing-dependencies-between-microservices/</guid>
+      <description>Sharing dependencies between Spring Microservices with Maven for better code-reuse and clean design
+What&amp;rsquo;s the problem You&amp;rsquo;re looking at microservices, but you realise you want to send an object from on service to the other. You write a class, and then you copy and paste it from the code of one service to the other &amp;hellip; 💡 there must be a better way to do this. You&amp;rsquo;re a good engineer and you know that copying around this POJO is bad practice.</description>
+    </item>
+    
+    <item>
+      <title>Kubernetes (k8s) for the Rest of Us</title>
+      <link>https://colin-riddell.github.io/post/k8s-for-the-rest-of-us/</link>
+      <pubDate>Thu, 28 Nov 2019 08:27:27 UTC</pubDate>
+      
+      <guid>https://colin-riddell.github.io/post/k8s-for-the-rest-of-us/</guid>
+      <description>Seems everywhere you look there are guides on how to get started with Kubernetes</description>
+    </item>
+    
+    <item>
       <title>Starting With Scala</title>
       <link>https://colin-riddell.github.io/post/starting-with-scala/</link>
       <pubDate>Tue, 24 Sep 2019 21:52:10 BST</pubDate>

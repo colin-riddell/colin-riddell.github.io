@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Sharing dependencies between Spring Microservices with Maven - Colin Riddell</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <meta name="keywords" content="">
+  <link rel="canonical" href="https://colin-riddell.github.io/post/sharing-dependencies-between-microservices/">
+
+  
+  
+
+  
+  
+
+  
+  
+
+  <link rel="stylesheet" type="text/css" href="https://colin-riddell.github.io/css/combined-min.css">
+  <link rel="stylesheet" type="text/css" href="https://colin-riddell.github.io/tipuesearch/tipuesearch.css">
+
+</head>
+<body class="">
+
+<div class="site-wrap">
+  <header class="site-header px2 px-responsive">
+  <div class="mt2 wrap">
+    <div class="measure">
+      <a href="https://colin-riddell.github.io" class="site-title">Colin Riddell</a>
+      <nav class="site-nav right">
+      <a href="https://colin-riddell.github.io/about/">About</a>
+<a href="https://colin-riddell.github.io/tags/">Tags</a>
+<a href="https://colin-riddell.github.io/contact/">Contact</a>
+</form>
+
+      </nav>
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</header>
+
+  <div class="post p2 p-responsive wrap" role="main">
+    <div class="measure">
+      <div class="post-header mb2">
+        <h1 class="py2">Sharing dependencies between Spring Microservices with Maven</h1>
+        <span class="post-meta">Apr 21, 2020 by Colin Riddell</span><br>
+        
+      </div>
+
+      <article class="post-content">
+      
+
+<p>Sharing dependencies between Spring Microservices with Maven for better code-reuse and clean design</p>
+
+<hr />
+
+<h2 id="what-s-the-problem">What&rsquo;s the problem</h2>
+
+<p>You&rsquo;re looking at microservices, but you realise you want to send an object from on service to the other. You write a class, and then you copy and paste it from the code of one service to the other &hellip; 💡 there must be a better way to do this. You&rsquo;re a good engineer and you know that copying around this POJO is bad practice. Well there is a better way - but if you&rsquo;re using Maven and Spring (Boot) it can be a little tricky. Read on to see how to solve that.</p>
+
+<h2 id="setting-up-a-parent-pom">Setting up a parent POM</h2>
+
+<p>We want to be able to create a common project for sharing dependencies between different Java based microservices. To do that we need to:</p>
+
+<ul>
+<li>Create a &laquo;parent&raquo; maven - this is a <code>pom.xml</code> which will sit outside all of the projects that make up our microservices and allow us to tie them together</li>
+<li>Create a common maven project as one of the child projects.</li>
+</ul>
+
+<p>In a simple example where a simple &laquo;sales-service&raquo; is being built and depends on some common project, the file structure will need to reflect this. We will have something like this at the end of this guide.</p>
+
+<pre><code class="language-tree">.
+├── pom.xml     -- the parent pom 
+├── common
+│   ├── pom.xml  -- shared dependencies go in here
+│   ├── src
+└── sales-service 
+    ├── pom.xml   -- will be modified to point to our own custom parent pom
+    └── src
+</code></pre>
+
+<h3 id="parent-pom-xml">Parent pom.xml</h3>
+
+<p>For this to work, the maven <code>groupId</code> must be shared across all maven projects in the tree. Each project will need a different <code>artifactId</code>, as usual.</p>
+
+<p>It should also describe the children, listing the <strong>directory names</strong> of child projects that should be part of this parent. For this we&rsquo;ll create two children <code>sales-service</code> and <code>common</code> under the <code>&lt;modules&gt;</code> list. Any subsequent child projects must be added to that list.</p>
+
+<p>A very minimal parent <code>pom.xml</code> for a project group <code>com.ordering.services</code> that has two child modules can be as simple as:</p>
+
+<pre><code class="language-xml">&lt;project xmlns=&quot;http://maven.apache.org/POM/4.0.0&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+	xsi:schemaLocation=&quot;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd&quot;&gt;
+	&lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
+	&lt;groupId&gt;com.ordering.services&lt;/groupId&gt;
+	&lt;artifactId&gt;ordering-services&lt;/artifactId&gt;
+	&lt;version&gt;1.0-SNAPSHOT&lt;/version&gt;
+	&lt;packaging&gt;pom&lt;/packaging&gt;
+
+	&lt;modules&gt;
+		&lt;module&gt;sales-service&lt;/module&gt;
+		&lt;module&gt;common&lt;/module&gt;
+	&lt;/modules&gt;
+
+&lt;/project&gt;
+</code></pre>
+
+<p>Notice that the <code>packaging</code> property is set to <code>pom</code> - aggregator projects (parent projects) need to be set as POM packaging.</p>
+
+<h3 id="adding-a-project">Adding a project</h3>
+
+<p>We&rsquo;ll now create and add a spring boot based project for <code>sales-service</code> mentioned above. We can create a new Spring Boot project using the <a href="https://start.spring.io/" target="_blank">Spring Initializr</a>. Once generated and brought into the directory structure some small changes need to be made to the sales-service projects&rsquo; <code>pom.xml</code>.</p>
+
+<p>Generated spring boot projects set the maven <code>parent</code> attribute to a <code>spring-boot-starter-parent</code> artifact.</p>
+
+<p><strong>This causes some confusion because we need to set the parent to our own new parent project.</strong></p>
+
+<p>Looking at the newly created <code>sales-service/pom.xml</code>  we need to:</p>
+
+<ul>
+<li>Remove the existing parent which is pointing to spring-boot</li>
+<li>Add our own parent, pointing to the <code>ordering-services</code> parent pom.</li>
+<li>refactor the parent section for spring-boot into a regular dependency in the <code>dependencyManagement</code> section.</li>
+</ul>
+
+<h4 id="remove-the-existing-parent">Remove the existing parent</h4>
+
+<p>Find this code and remove it, including the <code>parent</code> tags - versions may differ. Open the</p>
+
+<pre><code class="language-xml">	&lt;parent&gt;
+		&lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+		&lt;artifactId&gt;spring-boot-starter-parent&lt;/artifactId&gt;
+		&lt;version&gt;2.1.14.BUILD-SNAPSHOT&lt;/version&gt;
+		&lt;relativePath/&gt; &lt;!-- lookup parent from repository --&gt;
+	&lt;/parent&gt;
+</code></pre>
+
+<h4 id="point-to-our-own-parent">Point to our own parent</h4>
+
+<p>We want to set the parent to the project we setup earlier. To do this, we will set the parent to the parents artifact name <code>ordering-services</code> and of course match the <code>groupId</code>. <code>version</code> needs to match, too.</p>
+
+<pre><code class="language-xml">&lt;parent&gt;
+	&lt;groupId&gt;com.ordering.services&lt;/groupId&gt;
+	&lt;artifactId&gt;ordering-services&lt;/artifactId&gt;
+	&lt;version&gt;1.0-SNAPSHOT&lt;/version&gt;
+&lt;/parent&gt;
+</code></pre>
+
+<h4 id="refactor-spring-boot-into-a-management-dependency">Refactor spring boot into a management dependency</h4>
+
+<p>Now the spring-boot-starter-parent dependency is missing. Essentially, the Spring Boot dependency is missing, so it should be added again inside the <code>dependencyManagement</code> attribute. The <code>version</code> should match that of the one set in the deleted parent dependency setup.</p>
+
+<pre><code class="language-xml">&lt;dependencyManagement&gt;
+	&lt;dependencies&gt;
+		&lt;dependency&gt;
+			&lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+			&lt;artifactId&gt;spring-boot-dependencies&lt;/artifactId&gt;
+			&lt;version&gt;2.1.14.BUILD-SNAPSHOT&lt;/version&gt;
+			&lt;type&gt;pom&lt;/type&gt;
+			&lt;scope&gt;import&lt;/scope&gt;
+		&lt;/dependency&gt;
+	&lt;/dependencies&gt;
+&lt;/dependencyManagement&gt;
+
+</code></pre>
+
+<h2 id="making-use-of-a-common-dependencies-project">Making use of a <code>common</code> dependencies project</h2>
+
+<p>Any project that&rsquo;s setup and part of this parent-child relationship will now be able to use each others classes as if they were one big project. Conventionally that&rsquo;s done via creating a <code>common</code> project. A common project in a Maven build system is very powerful and saves a lot of configuration. Here are some of the things a common project can do for us:</p>
+
+<ul>
+<li>Share common classes (models, DTO&rsquo;s etc) - typically good for making sure objects are serialised and de-serialised from the same class.</li>
+<li>Share configuration that needs to be used in more than one project</li>
+<li>Dependencies that are imported by all projects can be refactored into the <code>pom.xml</code> of the common project, then any project wanting to use these can just import <code>common</code>.</li>
+</ul>
+
+<h3 id="setting-up-common">Setting up common</h3>
+
+<p>Create a new spring project with the Initilizr - don&rsquo;t add any dependencies - at least initially. Give it the <code>groupId</code> and set the <code>artifactId</code> to <code>common</code>.</p>
+
+<p>Just like other maven projects that are part of this parent, their parent should be set appropriate (like we done above for the sales-service). Delete the existing parent, and point it to your own parent.</p>
+
+<p>Any generated dependencies can also be removed, we will hand pick any dependencies we want to share across multiple projects and put them in here.</p>
+
+<p>Finally set 1.8  on <code>maven.compiler.source</code> and <code>maven.compiler.target</code> versions in the <code>properties</code> section. A simple <code>common</code> (under <code>common/pom.xml</code>) project POM will now look something like this:</p>
+
+<pre><code class="language-xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;project xmlns=&quot;http://maven.apache.org/POM/4.0.0&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+	xsi:schemaLocation=&quot;http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd&quot;&gt;
+	&lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
+
+	&lt;groupId&gt;com.ordering.services&lt;/groupId&gt;
+	&lt;artifactId&gt;common&lt;/artifactId&gt;
+	&lt;version&gt;0.0.1-SNAPSHOT&lt;/version&gt;
+	&lt;name&gt;common&lt;/name&gt;
+	&lt;description&gt;Demo project for Spring Boot&lt;/description&gt;
+
+	&lt;parent&gt;
+		&lt;groupId&gt;com.ordering.services&lt;/groupId&gt;
+		&lt;artifactId&gt;ordering-services&lt;/artifactId&gt;
+		&lt;version&gt;1.0-SNAPSHOT&lt;/version&gt;
+	&lt;/parent&gt;
+
+&lt;/project&gt;
+
+</code></pre>
+
+<p>Since there are no test dependencies, be sure to delete any test classes from the common project. One is provided by the spring initializr.</p>
+
+<p><strong>Also delete the main <code>CommonApplication.java</code></strong> since our common project won&rsquo;t actually be a runnning application but instead a project for sharing common code between projects.</p>
+
+<h3 id="set-language-versions">Set language versions</h3>
+
+<p>Move the  the language version properties into the parent pom (<code>./pom.xml</code>):</p>
+
+<pre><code class="language-xml">&lt;properties&gt;
+	&lt;java.version&gt;1.8&lt;/java.version&gt;
+	&lt;maven.compiler.source&gt;1.8&lt;/maven.compiler.source&gt;
+	&lt;maven.compiler.target&gt;1.8&lt;/maven.compiler.target&gt;
+&lt;/properties&gt;
+</code></pre>
+
+<p>This means any child project won&rsquo;t need to set these properties now, so remove them.</p>
+
+<p>So far we&rsquo;ve setup a tree of dependencies that resembles the following with the descriptions of the changes we&rsquo;ve made so far.</p>
+
+<pre><code class="language-tree">.
+├── pom.xml     -- parent pom has modules attribute pointing to `common` + `sales-service`
+├── common
+│   ├── pom.xml  -- generated from initializr but with dependencies removed and parent set to one above
+│   ├── src      -- as generated but with test classes deleted
+└── sales-service 
+    ├── pom.xml   -- generated with desired dependencies but parent set to our own + spring boot dependencies added into the `dependencyManagement` section.
+    └── src
+</code></pre>
+
+<h3 id="using-common-an-example">Using Common - an example</h3>
+
+<p>Adding a class to common will mean that any project in our tree that in turn imports <code>common</code> will be able to use that class. This is great, since if we&rsquo;re building with microservices pattern, then we can avoid copy paste of classes that need to be shared across multiple services.</p>
+
+<p>To demonstrate this, create a class called <code>Monkey</code> in a new package called <code>payloads</code> inside the <code>common</code> project. Give <code>Monkey</code> a property <code>name</code> and generate constructor and getters and setters.</p>
+
+<pre><code class="language-java">//Monkey.java
+public class Monkey {
+    private String name;
+
+    public Monkey(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+}
+</code></pre>
+
+<p><code>Monkey</code> can be used in any project that imports common. So import the common project from the <code>sales-service</code> project. Add the following dependency to <code>sales-service/pom.xml</code> in the <code>dependencies</code> attribute section:</p>
+
+<pre><code class="language-xml">&lt;dependency&gt;
+	&lt;groupId&gt;com.ordering.services&lt;/groupId&gt;
+	&lt;artifactId&gt;common&lt;/artifactId&gt;
+	&lt;version&gt;0.0.1-SNAPSHOT&lt;/version&gt;
+	&lt;scope&gt;compile&lt;/scope&gt;
+&lt;/dependency&gt;
+</code></pre>
+
+<p>We will create a controller in <code>sales-service</code> that will use <code>Monkey</code> to demonstrate this point.</p>
+
+<pre><code class="language-java">//SalesController.java
+
+@RestController
+public class SalesController {
+
+    @GetMapping(&quot;/monkeys&quot;)
+    public ResponseEntity&lt;Monkey&gt; getMonkey(){
+        return new ResponseEntity&lt;&gt;(new Monkey(&quot;George&quot;), HttpStatus.OK);
+    }
+}
+</code></pre>
+
+<p>That&rsquo;s it! Notice how the class <code>Monkey</code> can be detected in the class-path and easily imported because our <code>sales-service</code> project imports the <code>common</code> dependency where we defined <code>Monkey</code>.</p>
+
+<h2 id="note-on-generating-jar">Note on Generating Jar</h2>
+
+<p>If we want to make sure that Jar files are generated for every project in our tree, then the maven property <code>packaging</code> should be set to jar for each project we want a jar from when we ask for all of the projects to be packaged. Add this just below the project version.</p>
+
+<pre><code class="language-xml">	&lt;packaging&gt;jar&lt;/packaging&gt; 
+
+</code></pre>
+
+<p>We also need to enable the <code>repackaging</code> goal on the <code>spring-boot-maven-plugin</code>. This needs to be done if we&rsquo;re going to run the build jars from the command line with <code>java -jar</code>.</p>
+
+<p>To do that here, we&rsquo;ll look into <code>sales-service/pom.xml</code> and find locate the build secton. Adding an execution to this with the goal name <code>repackage</code> will enable this. The whole build attribute section now looks like this:</p>
+
+<pre><code class="language-xml">&lt;build&gt;
+	&lt;plugins&gt;
+		&lt;plugin&gt;
+			&lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+			&lt;artifactId&gt;spring-boot-maven-plugin&lt;/artifactId&gt;
+			&lt;executions&gt;                       &lt;!--new--&gt;
+				&lt;execution&gt;                    &lt;!--new--&gt;
+					&lt;goals&gt;                    &lt;!--new--&gt;
+						&lt;goal&gt;repackage&lt;/goal&gt; &lt;!--new--&gt;
+					&lt;/goals&gt;                   &lt;!--new--&gt;
+				&lt;/execution&gt;                   &lt;!--new--&gt;
+			&lt;/executions&gt;                      &lt;!--new--&gt;
+		&lt;/plugin&gt;
+	&lt;/plugins&gt;
+&lt;/build&gt;
+</code></pre>
+
+<h2 id="summary">Summary</h2>
+
+<p>We now have a project setup with an aggretator (parent) and a common that allows sharing of dependencies between multiple projects that are part of the larger parent group.</p>
+
+<p>We&rsquo;re also able to build the entire suite of projects using maven on the command line with <code>mvn package</code> and then run an individual jar from the command line with <code>java -jar myjar.jar</code>.</p>
+
+<h3 id="check-out-the-code">Check out the code</h3>
+
+<p>It is of course <a href="https://github.com/colin-riddell/spring-maven-shared-dependencies" target="_blank">all on github</a></p>
+
+      </article>
+
+      <p class="post-meta">Tags:&nbsp;
+        
+            
+            <a href="https://colin-riddell.github.io/tags/spring">spring</a>
+        
+            ,&nbsp;
+            <a href="https://colin-riddell.github.io/tags/spring-boot">spring-boot</a>
+        
+            ,&nbsp;
+            <a href="https://colin-riddell.github.io/tags/maven">maven</a>
+        
+            ,&nbsp;
+            <a href="https://colin-riddell.github.io/tags/java">java</a>
+        
+            ,&nbsp;
+            <a href="https://colin-riddell.github.io/tags/microservices">microservices</a>
+        
+      </p>
+
+      
+
+    </div>
+  </div>
+</div>
+    <footer class="footer">
+      <div class="p2 wrap">
+        <div class="measure mt1 center">
+      <nav class="social-icons icons">
+<a class="fa fa-rss rss" href="../../index.xml"></a>
+
+<a class="fa fa-twitter twitter" href="https://twitter.com/colin_riddell"></a>
+
+</nav>
+
+          <small>
+            Copyright &#169; 2017<br>
+            Powered by <a href="http://gohugo.io/" target="_blank">Hugo</a> &amp; <a href="https://github.com/azmelanar/hugo-theme-pixyll" target="_blank">Pixyll</a>
+          </small>
+        </div>
+      </div>
+    </footer>
+
+    
+    <script src="../../js/highlight.pack.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+
+    
+    
+
+
+</body>
+</html>
+

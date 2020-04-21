@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Kubernetes on Colin Riddell</title>
+    <link>https://colin-riddell.github.io/tags/kubernetes/</link>
+    <description>Recent content in Kubernetes on Colin Riddell</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 28 Nov 2019 08:27:27 +0000</lastBuildDate>
+    
+	<atom:link href="https://colin-riddell.github.io/tags/kubernetes/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Kubernetes (k8s) for the Rest of Us</title>
+      <link>https://colin-riddell.github.io/post/k8s-for-the-rest-of-us/</link>
+      <pubDate>Thu, 28 Nov 2019 08:27:27 +0000</pubDate>
+      
+      <guid>https://colin-riddell.github.io/post/k8s-for-the-rest-of-us/</guid>
+      <description>Seems everywhere you look there are guides on how to get started with Kubernetes</description>
+    </item>
+    
+  </channel>
+</rss>

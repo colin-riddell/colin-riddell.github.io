@@ -6,10 +6,91 @@
     <description>Recent content in Tags on Colin Riddell</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 24 Sep 2019 21:52:10 +0100</lastBuildDate>
+    <lastBuildDate>Tue, 21 Apr 2020 11:29:11 +0100</lastBuildDate>
     
 	<atom:link href="https://colin-riddell.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>java</title>
+      <link>https://colin-riddell.github.io/tags/java/</link>
+      <pubDate>Tue, 21 Apr 2020 11:29:11 +0100</pubDate>
+      
+      <guid>https://colin-riddell.github.io/tags/java/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>maven</title>
+      <link>https://colin-riddell.github.io/tags/maven/</link>
+      <pubDate>Tue, 21 Apr 2020 11:29:11 +0100</pubDate>
+      
+      <guid>https://colin-riddell.github.io/tags/maven/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>microservices</title>
+      <link>https://colin-riddell.github.io/tags/microservices/</link>
+      <pubDate>Tue, 21 Apr 2020 11:29:11 +0100</pubDate>
+      
+      <guid>https://colin-riddell.github.io/tags/microservices/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>spring</title>
+      <link>https://colin-riddell.github.io/tags/spring/</link>
+      <pubDate>Tue, 21 Apr 2020 11:29:11 +0100</pubDate>
+      
+      <guid>https://colin-riddell.github.io/tags/spring/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>spring-boot</title>
+      <link>https://colin-riddell.github.io/tags/spring-boot/</link>
+      <pubDate>Tue, 21 Apr 2020 11:29:11 +0100</pubDate>
+      
+      <guid>https://colin-riddell.github.io/tags/spring-boot/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>cloud</title>
+      <link>https://colin-riddell.github.io/tags/cloud/</link>
+      <pubDate>Thu, 28 Nov 2019 08:27:27 +0000</pubDate>
+      
+      <guid>https://colin-riddell.github.io/tags/cloud/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>containers</title>
+      <link>https://colin-riddell.github.io/tags/containers/</link>
+      <pubDate>Thu, 28 Nov 2019 08:27:27 +0000</pubDate>
+      
+      <guid>https://colin-riddell.github.io/tags/containers/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>devops</title>
+      <link>https://colin-riddell.github.io/tags/devops/</link>
+      <pubDate>Thu, 28 Nov 2019 08:27:27 +0000</pubDate>
+      
+      <guid>https://colin-riddell.github.io/tags/devops/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Kubernetes</title>
+      <link>https://colin-riddell.github.io/tags/kubernetes/</link>
+      <pubDate>Thu, 28 Nov 2019 08:27:27 +0000</pubDate>
+      
+      <guid>https://colin-riddell.github.io/tags/kubernetes/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>asynchronous</title>
@@ -44,24 +125,6 @@
       <pubDate>Tue, 24 Sep 2019 21:52:10 +0100</pubDate>
       
       <guid>https://colin-riddell.github.io/tags/scala/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>cloud</title>
-      <link>https://colin-riddell.github.io/tags/cloud/</link>
-      <pubDate>Thu, 19 Sep 2019 18:19:14 +0100</pubDate>
-      
-      <guid>https://colin-riddell.github.io/tags/cloud/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>devops</title>
-      <link>https://colin-riddell.github.io/tags/devops/</link>
-      <pubDate>Thu, 19 Sep 2019 18:19:14 +0100</pubDate>
-      
-      <guid>https://colin-riddell.github.io/tags/devops/</guid>
       <description></description>
     </item>
     
