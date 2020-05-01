@@ -127,7 +127,7 @@
 
 <h4 id="remove-the-existing-parent">Remove the existing parent</h4>
 
-<p>Find this code and remove it, including the <code>parent</code> tags - versions may differ. Open the</p>
+<p>Find this code and remove it, including the <code>parent</code> tags - versions may differ. Open the pom.xml in <code>sales-service</code> or whatever project you generated using the Initilizr.</p>
 
 <pre><code class="language-xml">	&lt;parent&gt;
 		&lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
@@ -139,7 +139,7 @@
 
 <h4 id="point-to-our-own-parent">Point to our own parent</h4>
 
-<p>We want to set the parent to the project we setup earlier. To do this, we will set the parent to the parents artifact name <code>ordering-services</code> and of course match the <code>groupId</code>. <code>version</code> needs to match, too.</p>
+<p>We want to set the parent to the project we setup earlier. To do this, we will set the parent to the parents artifact name <code>ordering-services</code> and of course the <code>groupId</code>. <code>version</code> needs to match, too.</p>
 
 <pre><code class="language-xml">&lt;parent&gt;
 	&lt;groupId&gt;com.ordering.services&lt;/groupId&gt;
@@ -165,6 +165,8 @@
 &lt;/dependencyManagement&gt;
 
 </code></pre>
+
+<p>By this stage a parent project has been setup with one child project (<code>sales-service</code>) in it. The parent can see the child, and the child knows it&rsquo;s part of the parent 👩‍👦</p>
 
 <h2 id="making-use-of-a-common-dependencies-project">Making use of a <code>common</code> dependencies project</h2>
 
@@ -210,6 +212,8 @@
 <p>Since there are no test dependencies, be sure to delete any test classes from the common project. One is provided by the spring initializr.</p>
 
 <p><strong>Also delete the main <code>CommonApplication.java</code></strong> since our common project won&rsquo;t actually be a runnning application but instead a project for sharing common code between projects.</p>
+
+<p><strong>Also delete any test classes from in the common project</strong></p>
 
 <h3 id="set-language-versions">Set language versions</h3>
 
@@ -270,7 +274,11 @@ public class Monkey {
 &lt;/dependency&gt;
 </code></pre>
 
-<p>We will create a controller in <code>sales-service</code> that will use <code>Monkey</code> to demonstrate this point.</p>
+<p>Notice that adding this dependency looks like any regular maven dependency that you&rsquo;d add for a publically available package. But in this case notice that the group is our own group <code>com.ordering.services</code> and the artifact is that of the common project.</p>
+
+<hr />
+
+<p>We will create a controller in <code>sales-service</code> that will use <code>Monkey</code> class (which is defined and lives in <code>common</code> to demonstrate this point.</p>
 
 <pre><code class="language-java">//SalesController.java
 
@@ -285,6 +293,8 @@ public class SalesController {
 </code></pre>
 
 <p>That&rsquo;s it! Notice how the class <code>Monkey</code> can be detected in the class-path and easily imported because our <code>sales-service</code> project imports the <code>common</code> dependency where we defined <code>Monkey</code>.</p>
+
+<p><strong>Very cool</strong> - for any subsiquent projects that need to use the <code>Monkey</code> class, they just need to use dependency noted above to be able to do so.</p>
 
 <h2 id="note-on-generating-jar">Note on Generating Jar</h2>
 
@@ -324,6 +334,8 @@ public class SalesController {
 <h3 id="check-out-the-code">Check out the code</h3>
 
 <p>It is of course <a href="https://github.com/colin-riddell/spring-maven-shared-dependencies" target="_blank">all on github</a></p>
+
+<p>I figured this out myself. So there might be an easier or nicer way to do this.. if there is please get in touch - I&rsquo;d love to know it.</p>
 
       </article>
 

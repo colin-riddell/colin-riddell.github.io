@@ -55,7 +55,7 @@ Install Docker - do before starting Docker Download - Mac</description>
       <pubDate>Sat, 08 Nov 2014 16:42:18 &#43;0400</pubDate>
       
       <guid>https://colin-riddell.github.io/about/</guid>
-      <description>Put CV / intro to me here</description>
+      <description></description>
     </item>
     
     <item>
@@ -69,11 +69,22 @@ Install Docker - do before starting Docker Download - Mac</description>
     
     <item>
       <title>Resumè</title>
+      <link>https://colin-riddell.github.io/cv/</link>
+      <pubDate>Sat, 08 Nov 2014 16:42:18 &#43;0400</pubDate>
+      
+      <guid>https://colin-riddell.github.io/cv/</guid>
+      <description>My cv</description>
+    </item>
+    
+    <item>
+      <title>Resumè</title>
       <link>https://colin-riddell.github.io/resume/</link>
       <pubDate>Sat, 08 Nov 2014 16:42:18 &#43;0400</pubDate>
       
       <guid>https://colin-riddell.github.io/resume/</guid>
-      <description>My Resumè</description>
+      <description>#Curriculum Vitae - Colin Riddell BSc (Hons)
+ Website: https://colin-riddell.github.io/ Email: colinjohnriddell@gmail.com GitHub: https://github.com/colin-riddell Phone: +44-(0)7823779700 Residence: Falkirk, United Kingdom Academic Education: Software Engineering (BSc) 2:1 (Stirling University 2004 - 20008)  Software Engineer and Technologist An experienced, disciplined and formally trained (BSc) Software Engineer, Architect and Technical Product Manager with 10+ years experience across a very diverse range of sectors and technological disciplines.
+Bringing an infectious enthusiasm for Software Engineering disciplines, technologies and entrepreneurial Product Management to teams.</description>
     </item>
     
   </channel>
