@@ -12,12 +12,12 @@
     
     
     <item>
-      <title>Sharing dependencies between Spring Microservices with Maven</title>
+      <title>Sharing dependencies between Spring Boot Microservices with Maven</title>
       <link>https://colin-riddell.github.io/post/sharing-dependencies-between-microservices/</link>
       <pubDate>Tue, 21 Apr 2020 11:29:11 +0100</pubDate>
       
       <guid>https://colin-riddell.github.io/post/sharing-dependencies-between-microservices/</guid>
-      <description>Sharing dependencies between Spring Microservices with Maven for better code-reuse and clean design
+      <description>Sharing dependencies between Spring Boot Microservices and projects with Maven for better code-reuse and clean design
 What&amp;rsquo;s the problem You&amp;rsquo;re looking at microservices, but you realise you want to send an object from one service to the other. You write a class, and then you copy and paste it from the code of one service to the other &amp;hellip; 💡 there must be a better way to do this. You&amp;rsquo;re a good engineer and you know that copying around this POJO is bad practice.</description>
     </item>
     

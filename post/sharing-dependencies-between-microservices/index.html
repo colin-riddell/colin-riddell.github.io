@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Sharing dependencies between Spring Microservices with Maven - Colin Riddell</title>
+  <title>Sharing dependencies between Spring Boot Microservices with Maven - Colin Riddell</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="">
   <meta name="author" content="">
@@ -45,7 +45,7 @@
   <div class="post p2 p-responsive wrap" role="main">
     <div class="measure">
       <div class="post-header mb2">
-        <h1 class="py2">Sharing dependencies between Spring Microservices with Maven</h1>
+        <h1 class="py2">Sharing dependencies between Spring Boot Microservices with Maven</h1>
         <span class="post-meta">Apr 21, 2020 by Colin Riddell</span><br>
         
       </div>
@@ -53,20 +53,20 @@
       <article class="post-content">
       
 
-<p>Sharing dependencies between Spring Microservices with Maven for better code-reuse and clean design</p>
+<p>Sharing dependencies between Spring Boot Microservices and projects with Maven for better code-reuse and clean design</p>
 
 <hr />
 
 <h2 id="what-s-the-problem">What&rsquo;s the problem</h2>
 
-<p>You&rsquo;re looking at microservices, but you realise you want to send an object from one service to the other. You write a class, and then you copy and paste it from the code of one service to the other &hellip; 💡 there must be a better way to do this. You&rsquo;re a good engineer and you know that copying around this POJO is bad practice. Well there is a better way - but if you&rsquo;re using Maven and Spring (Boot) it can be a little tricky. Read on to see how to solve that.</p>
+<p>You&rsquo;re looking at microservices, but you realise you want to send an object from one service to the other. You write a class, and then you copy and paste it from the code of one service to the other &hellip; 💡 there must be a better way to do this. You&rsquo;re a good engineer and you know that copying around this POJO is bad practice. If you&rsquo;re using Maven</p>
 
 <h2 id="setting-up-a-parent-pom">Setting up a parent POM</h2>
 
-<p>We want to be able to create a common project for sharing dependencies between different Java based microservices. To do that we need to:</p>
+<p>We want to setup a common maven project that&rsquo;s imported by any other project that needs its dependencies. At a high level to do that we need to:</p>
 
 <ul>
-<li>Create a &laquo;parent&raquo; maven - this is a <code>pom.xml</code> which will sit outside all of the projects that make up our microservices and allow us to tie them together</li>
+<li>Create a &laquo;parent&raquo; maven file (<code>pom.xml</code>) - this is a <code>pom.xml</code> which will sit outside all of the projects that make up our microservices and allow us to tie them together - the goal is to make a <code>common</code> project but the easiest way to do that is to first create a parent pom.</li>
 <li>Create a common maven project as one of the child projects.</li>
 <li>Import the common dependency from any other dependencies that need it</li>
 </ul>
@@ -79,7 +79,7 @@
 │   ├── pom.xml  -- shared dependencies go in here
 │   ├── src
 └── sales-service 
-    ├── pom.xml   -- will be modified to point to our own custom parent pom
+    ├── pom.xml   -- will be modified to point to our own custom parent pom and import code from common
     └── src
 </code></pre>
 
@@ -288,13 +288,13 @@ public class SalesController {
 
 <h2 id="note-on-generating-jar">Note on Generating Jar</h2>
 
-<p>If we want to make sure that Jar files are generated for every project in our tree, then the maven property <code>packaging</code> should be set to jar for each project we want a jar from when we ask for all of the projects to be packaged. Add this just below the project version.</p>
+<p>If we want to make sure that Jar files are generated for every project in our tree, then the maven property <code>packaging</code> should be set to jar for each project we want a jar from when packaging is run. Add this just below the project version.</p>
 
 <pre><code class="language-xml">	&lt;packaging&gt;jar&lt;/packaging&gt; 
 
 </code></pre>
 
-<p>We also need to enable the <code>repackaging</code> goal on the <code>spring-boot-maven-plugin</code>. This needs to be done if we&rsquo;re going to run the build jars from the command line with <code>java -jar</code>.</p>
+<p>We also need to enable the <code>repackaging</code> goal on the <code>spring-boot-maven-plugin</code>. This needs to be done if we&rsquo;re going to run the built jars from the command line with <code>java -jar</code>.</p>
 
 <p>To do that here, we&rsquo;ll look into <code>sales-service/pom.xml</code> and find locate the build secton. Adding an execution to this with the goal name <code>repackage</code> will enable this. The whole build attribute section now looks like this:</p>
 
