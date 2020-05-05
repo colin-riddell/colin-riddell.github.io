@@ -57,42 +57,6 @@
     </item>
     
     <item>
-      <title>cloud</title>
-      <link>https://colin-riddell.github.io/tags/cloud/</link>
-      <pubDate>Thu, 28 Nov 2019 08:27:27 +0000</pubDate>
-      
-      <guid>https://colin-riddell.github.io/tags/cloud/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>containers</title>
-      <link>https://colin-riddell.github.io/tags/containers/</link>
-      <pubDate>Thu, 28 Nov 2019 08:27:27 +0000</pubDate>
-      
-      <guid>https://colin-riddell.github.io/tags/containers/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>devops</title>
-      <link>https://colin-riddell.github.io/tags/devops/</link>
-      <pubDate>Thu, 28 Nov 2019 08:27:27 +0000</pubDate>
-      
-      <guid>https://colin-riddell.github.io/tags/devops/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Kubernetes</title>
-      <link>https://colin-riddell.github.io/tags/kubernetes/</link>
-      <pubDate>Thu, 28 Nov 2019 08:27:27 +0000</pubDate>
-      
-      <guid>https://colin-riddell.github.io/tags/kubernetes/</guid>
-      <description></description>
-    </item>
-    
-    <item>
       <title>asynchronous</title>
       <link>https://colin-riddell.github.io/tags/asynchronous/</link>
       <pubDate>Tue, 24 Sep 2019 21:52:10 +0100</pubDate>
@@ -125,6 +89,24 @@
       <pubDate>Tue, 24 Sep 2019 21:52:10 +0100</pubDate>
       
       <guid>https://colin-riddell.github.io/tags/scala/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>cloud</title>
+      <link>https://colin-riddell.github.io/tags/cloud/</link>
+      <pubDate>Thu, 19 Sep 2019 18:19:14 +0100</pubDate>
+      
+      <guid>https://colin-riddell.github.io/tags/cloud/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>devops</title>
+      <link>https://colin-riddell.github.io/tags/devops/</link>
+      <pubDate>Thu, 19 Sep 2019 18:19:14 +0100</pubDate>
+      
+      <guid>https://colin-riddell.github.io/tags/devops/</guid>
       <description></description>
     </item>
     
