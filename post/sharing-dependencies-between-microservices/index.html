@@ -78,11 +78,11 @@
 <p>In a simple example where a simple &laquo;sales-service&raquo; is being built and depends on some common project, the file structure will need to reflect this. We will have something like this at the end of this guide.</p>
 
 <pre><code class="language-tree">.
-├── pom.xml     -- the parent pom 
+├── pom.xml     -- the parent pom
 ├── common
 │   ├── pom.xml  -- shared dependencies go in here
 │   ├── src
-└── sales-service 
+└── sales-service
     ├── pom.xml   -- will be modified to point to our own custom parent pom and import code from common
     └── src
 </code></pre>
@@ -239,7 +239,7 @@
 ├── common
 │   ├── pom.xml  -- generated from initializr but with dependencies removed and parent set to one above
 │   ├── src      -- as generated but with test classes deleted
-└── sales-service 
+└── sales-service
     ├── pom.xml   -- generated with desired dependencies but parent set to our own + spring boot dependencies added into the `dependencyManagement` section.
     └── src
 </code></pre>
@@ -304,7 +304,7 @@ public class SalesController {
 
 <p>If we want to make sure that Jar files are generated for every project in our tree, then the maven property <code>packaging</code> should be set to jar for each project we want a jar from when packaging is run. Add this just below the project version.</p>
 
-<pre><code class="language-xml">	&lt;packaging&gt;jar&lt;/packaging&gt; 
+<pre><code class="language-xml">	&lt;packaging&gt;jar&lt;/packaging&gt;
 
 </code></pre>
 
@@ -340,6 +340,12 @@ public class SalesController {
 <p>It is of course <a href="https://github.com/colin-riddell/spring-maven-shared-dependencies" target="_blank">all on github</a></p>
 
 <p>I figured this out myself. So there might be an easier or nicer way to do this.. if there is please get in touch - I&rsquo;d love to know it.</p>
+
+<hr />
+
+<p>Got feedback on the article? Got questions or corrections&hellip; If you want to talk to me, I am really open to meeting new people and learning things. Please reach out..</p>
+
+<p><strong>Say hi on Twitter</strong> <a href="🐦 https://twitter.com/colin_riddell" target="_blank">https://twitter.com/colin_riddell</a></p>
 
       </article>
 
