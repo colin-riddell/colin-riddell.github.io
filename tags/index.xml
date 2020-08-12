@@ -6,44 +6,125 @@
     <description>Recent content in Tags on Colin Riddell</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 03 Aug 2020 20:59:16 +0100</lastBuildDate>
+    <lastBuildDate>Mon, 10 Aug 2020 19:04:15 +0100</lastBuildDate>
     
 	<atom:link href="https://colin-riddell.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
-      <title>graalvm</title>
-      <link>https://colin-riddell.github.io/tags/graalvm/</link>
-      <pubDate>Mon, 03 Aug 2020 20:59:16 +0100</pubDate>
+      <title>agile</title>
+      <link>https://colin-riddell.github.io/tags/agile/</link>
+      <pubDate>Mon, 10 Aug 2020 19:04:15 +0100</pubDate>
       
-      <guid>https://colin-riddell.github.io/tags/graalvm/</guid>
+      <guid>https://colin-riddell.github.io/tags/agile/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>full-stack</title>
+      <link>https://colin-riddell.github.io/tags/full-stack/</link>
+      <pubDate>Mon, 10 Aug 2020 19:04:15 +0100</pubDate>
+      
+      <guid>https://colin-riddell.github.io/tags/full-stack/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>job-stories</title>
+      <link>https://colin-riddell.github.io/tags/job-stories/</link>
+      <pubDate>Mon, 10 Aug 2020 19:04:15 +0100</pubDate>
+      
+      <guid>https://colin-riddell.github.io/tags/job-stories/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>jobs-to-be-done</title>
+      <link>https://colin-riddell.github.io/tags/jobs-to-be-done/</link>
+      <pubDate>Mon, 10 Aug 2020 19:04:15 +0100</pubDate>
+      
+      <guid>https://colin-riddell.github.io/tags/jobs-to-be-done/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>JTBD</title>
+      <link>https://colin-riddell.github.io/tags/jtbd/</link>
+      <pubDate>Mon, 10 Aug 2020 19:04:15 +0100</pubDate>
+      
+      <guid>https://colin-riddell.github.io/tags/jtbd/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>process-mapping</title>
+      <link>https://colin-riddell.github.io/tags/process-mapping/</link>
+      <pubDate>Mon, 10 Aug 2020 19:04:15 +0100</pubDate>
+      
+      <guid>https://colin-riddell.github.io/tags/process-mapping/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>product</title>
+      <link>https://colin-riddell.github.io/tags/product/</link>
+      <pubDate>Mon, 10 Aug 2020 19:04:15 +0100</pubDate>
+      
+      <guid>https://colin-riddell.github.io/tags/product/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>product-design</title>
+      <link>https://colin-riddell.github.io/tags/product-design/</link>
+      <pubDate>Mon, 10 Aug 2020 19:04:15 +0100</pubDate>
+      
+      <guid>https://colin-riddell.github.io/tags/product-design/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>product-planning</title>
+      <link>https://colin-riddell.github.io/tags/product-planning/</link>
+      <pubDate>Mon, 10 Aug 2020 19:04:15 +0100</pubDate>
+      
+      <guid>https://colin-riddell.github.io/tags/product-planning/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>user</title>
+      <link>https://colin-riddell.github.io/tags/user/</link>
+      <pubDate>Mon, 10 Aug 2020 19:04:15 +0100</pubDate>
+      
+      <guid>https://colin-riddell.github.io/tags/user/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>user-stories</title>
+      <link>https://colin-riddell.github.io/tags/user-stories/</link>
+      <pubDate>Mon, 10 Aug 2020 19:04:15 +0100</pubDate>
+      
+      <guid>https://colin-riddell.github.io/tags/user-stories/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>ux</title>
+      <link>https://colin-riddell.github.io/tags/ux/</link>
+      <pubDate>Mon, 10 Aug 2020 19:04:15 +0100</pubDate>
+      
+      <guid>https://colin-riddell.github.io/tags/ux/</guid>
       <description></description>
     </item>
     
     <item>
       <title>java</title>
       <link>https://colin-riddell.github.io/tags/java/</link>
-      <pubDate>Mon, 03 Aug 2020 20:59:16 +0100</pubDate>
+      <pubDate>Tue, 21 Apr 2020 11:29:11 +0100</pubDate>
       
       <guid>https://colin-riddell.github.io/tags/java/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>native</title>
-      <link>https://colin-riddell.github.io/tags/native/</link>
-      <pubDate>Mon, 03 Aug 2020 20:59:16 +0100</pubDate>
-      
-      <guid>https://colin-riddell.github.io/tags/native/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>quarkus</title>
-      <link>https://colin-riddell.github.io/tags/quarkus/</link>
-      <pubDate>Mon, 03 Aug 2020 20:59:16 +0100</pubDate>
-      
-      <guid>https://colin-riddell.github.io/tags/quarkus/</guid>
       <description></description>
     </item>
     

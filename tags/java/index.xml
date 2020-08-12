@@ -6,22 +6,10 @@
     <description>Recent content in java on Colin Riddell</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 03 Aug 2020 20:59:16 +0100</lastBuildDate>
+    <lastBuildDate>Tue, 21 Apr 2020 11:29:11 +0100</lastBuildDate>
     
 	<atom:link href="https://colin-riddell.github.io/tags/java/index.xml" rel="self" type="application/rss+xml" />
     
-    
-    <item>
-      <title>Quarkus Is Insanely Cool</title>
-      <link>https://colin-riddell.github.io/post/quarkus-is-insanely-cool/</link>
-      <pubDate>Mon, 03 Aug 2020 20:59:16 +0100</pubDate>
-      
-      <guid>https://colin-riddell.github.io/post/quarkus-is-insanely-cool/</guid>
-      <description>Quarkus is a Java framework that is crazy fast, compiles to native code and has a dreamy developer experience. 😍 I am in love
-What you so excited about Well. Imagine Spring boot if it started up in a fraction of a second. Imagine if you could not have to worry about running your application on a JVM container.
-Still confused? Allow me to explain&amp;hellip;
-When you run a Java application in a container you need a JVM container.</description>
-    </item>
     
     <item>
       <title>Sharing dependencies between Spring Boot Microservices with Maven</title>

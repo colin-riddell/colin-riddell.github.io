@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Full Stack Curry #1: The Problem - Colin Riddell</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <meta name="keywords" content="">
+  <link rel="canonical" href="https://colin-riddell.github.io/post/full-stack-curry-part-1/">
+
+  
+  
+
+  
+  
+
+  
+  
+
+  <link rel="stylesheet" type="text/css" href="https://colin-riddell.github.io/css/combined-min.css">
+  <link rel="stylesheet" type="text/css" href="https://colin-riddell.github.io/tipuesearch/tipuesearch.css">
+
+</head>
+<body class="">
+
+<div class="site-wrap">
+  <header class="site-header px2 px-responsive">
+  <div class="mt2 wrap">
+    <div class="measure">
+      <a href="https://colin-riddell.github.io" class="site-title">Colin Riddell</a>
+      <nav class="site-nav right">
+      <a href="https://colin-riddell.github.io/about/">About</a>
+<a href="https://colin-riddell.github.io/tags/">Tags</a>
+<a href="https://colin-riddell.github.io/contact/">Contact</a>
+</form>
+
+      </nav>
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</header>
+
+  <div class="post p2 p-responsive wrap" role="main">
+    <div class="measure">
+      <div class="post-header mb2">
+        <h1 class="py2">Full Stack Curry #1: The Problem</h1>
+        <span class="post-meta">Aug 10, 2020 by Colin Riddell</span><br>
+        
+      </div>
+
+      <article class="post-content">
+      
+
+<p>This is part 1 in a series of posts. In this series I am going to explain how I created a full-stack curry ordering app&rsquo;. Yes, you heard that correctly. I built and deployed into production a curry ordering app that allows people to order curry online. The project was inspired by the lovely team over at <a href="https://twitter.com/hashtag/hardeepisyourcurry?src=hashtag_click&amp;f=live" target="_blank">#hardeepisyourcurry</a></p>
+
+<p>I&rsquo;m going to share how I did it in as much detail as possible, while highlighting the learning curves and problems that I faced along the way. Across several posts in this little series I&rsquo;ll go into specifics about everything from UX and User Stories to Systems Design and networking and Deployment with things like Docker and Kubernetes. I&rsquo;ll share findings on React and Redux and spill the beans on what I&rsquo;ve found to be some pretty nice features of Spring Boot. So if you&rsquo;re interested in gaining a perspective that goes all the way from User Stories and UX to nginx configs and Redux Thunks, please bookmark and follow me on <a href="https://twitter.com/colin_riddell" target="_blank">Twitter</a> or <a href="https://www.linkedin.com/in/cjriddell/" target="_blank">LinkedIn</a> to keep informed of new posts.</p>
+
+<p>I&rsquo;ve found that writing about things like this helps me remember them longer term, so this is as much for myself than anyone else. But if someone reads it and finds it interesting or useful, that&rsquo;s cool too.</p>
+
+<h1 id="part-1-understanding-the-problem">Part 1 - Understanding the Problem</h1>
+
+<p>Research is important. So I jumped onto twitter and got on the curry bandwagon. This is an actual working curry service (Curry As A Service?) operating in central Scotland. It&rsquo;s ran by comedian and chef Hardeep Kohli. At the moment it&rsquo;s advertised via twitter and orders are taken by email for delivery on certain dates and locations across central Scotland. The instructions from Hardeep Kohli were simple:</p>
+
+<ul>
+<li>Deliveries in certain towns across Scotland on certain days</li>
+<li>Email with what you want from the menu (shared in a tweet)</li>
+<li>You&rsquo;ll be told if your order made it in</li>
+</ul>
+
+<p>I emailed my order as instructed and after about 10 mins I got a reply &laquo;You&rsquo;re in!&raquo; it said.</p>
+
+<blockquote>
+<p>We&rsquo;ll deliver your curries on Saturday sometime in the afternoon. We&rsquo;ll send a payment link just before we deliver to take your payment.</p>
+</blockquote>
+
+<p><strong>This was beautiful</strong> The MVBP (Minimum Viable Business Product) was already in place! I quickly started plotting my plans. I realised that my objective was to mimic their current system as closely as possible before adding on any fancy features.</p>
+
+<h2 id="mimic-the-current-process">Mimic the current process</h2>
+
+<p>From my experience as a Product Manager, I know that it&rsquo;s all too easy to get carried away and designing bells and whistles and trying really hard to make it flash with amazing cool whizzy features. Especially when designing a digital system <strong>that replaces a working manual pen-and-paper system that&rsquo;s being used to success now</strong>.</p>
+
+<p>I can&rsquo;t express how much of a bad idea this is! Try to understand <em>exactly</em> how the system is currently being implemented then <strong>implement the digital version of that system that closely models the current workflow</strong>! This is super important. Don&rsquo;t get carried away with features and ways of operating that are <em>not currently already in place</em>. Do this becuase if you try to bring in new ideas at this stage, the early stage prototype will be even more difficult to verify if it&rsquo;s correct as you&rsquo;ll have nothing to compare the processes to. You need to be comparing 🍏 with 🍏.</p>
+
+<p><strong>Diagram, diagram, diagram. The current process mapped:</strong></p>
+
+<p><img src="current_process_flow.png" alt="" />
+I&rsquo;m well known for using Ziteboard at work, so I took to Ziteboard to map the current process as it stands. Notice that the connections between the parts of the map are described as verb noun. &laquo;receive order&raquo;, &laquo;email confirmation&raquo; etc.
+It&rsquo;s important when doing this kind of thing to keep the descriptions of the interactions in this format as it&rsquo;s the least ambiguous way to communicate what&rsquo;s happening.</p>
+
+<p>For the sake of this simple process map I&rsquo;ve got two kinda &laquo;personas&raquo; (they&rsquo;re not really full personas yet btw). <span style="color:red"><strong>Curry Business</strong></span> is the person running the curry company, and <span style="color:red"><strong>Customer</strong></span> is their customer.</p>
+
+<p>The points below match to the numbers in blue in the diagram above.</p>
+
+<ul>
+<li><strong>1.</strong> Curry business shares menu and dates (currently done one Twitter)</li>
+<li><strong>2.</strong> Customer sees menu (again on twitter)</li>
+<li><strong>3.</strong> Customer emails order</li>
+<li><strong>4.</strong> Business receives order</li>
+<li><strong>5.</strong> Business makes decision</li>
+<li><strong>6.</strong> Business Emails confirmation</li>
+<li><strong>7.</strong> Customer waits for delivery</li>
+<li><strong>8.</strong> Curry delivery is dispatched</li>
+<li><strong>9.</strong> Just before or just after <strong>8</strong>, the payment is requested via the separate payment provider</li>
+<li><strong>10.</strong> Customer receives pay request and pays</li>
+<li><strong>11.</strong> Customer receives curry order</li>
+</ul>
+
+<p>
+  <img style="float: right; position: relative;
+  top: 100%; margin: 0px 15px 15px 0px;" src="https://miro.medium.com/max/150/1*l87riHjnc_uTn1qhm4MFhg.png" />
+ I learned about this mapping process when <a href="https://medium.com/resdiary-product-team/design-sprinting-b88ae96b236c">Experimenting with Design Sprints</a> when working for ResDiary. An online restaurant booking and management platform.
+Mapping like this is the outcome of the first day in the 5-day design sprint created by Google Ventures for helping prototype and build products effectively and <b>quickly</b>.
+  <br style="clear: both;" />
+</p>
+
+<p>Some notable points that I gleaned from mapping out the current system using the process mapping technique from &laquo;Sprint&raquo;:</p>
+
+<ul>
+<li>The current solution is lightweight and extremely effective</li>
+<li>Delivery days are fixed by town/city at the start of every week. Each week a new tweet is sent out with the weeks menu and delivery locations. Essentially, you can only get curry if you live in one of the delivery locations, and <strong>only on the days specified</strong></li>
+<li>As a result of above, the business works in weekly cycles with new menu and dates appearing online (twitter) each week.</li>
+<li>No specific delivery time is promised upon making an order. This is becuase the curries are cleverly delivered <strong>cold</strong>, meaning the business isn&rsquo;t rushing to deliver all curries around dinner time. The most detailed estimate is either AM or PM.</li>
+<li>Payment is taken <strong>on trust</strong> a little. I received my payment request <strong>after</strong> getting the curry. Many local business that deliver seem to operate this way.</li>
+</ul>
+
+<p>Generally, there&rsquo;s not much to critique about the current process. It works extremely well, so the aim of any system wouldn&rsquo;t be to immediately modify the current process in any significant way.</p>
+
+<h2 id="initial-thoughts-on-benefits-and-related-hypothesis">Initial thoughts on benefits and related hypothesis</h2>
+
+<p>From looking at the current process, the biggest challenge that could be eradicated would be payments. An integrated ordering and payment solution seems the most obvious. I presumed it was difficult taking payments on exactly the same day of delivery, but still recognised the flexibility that this offers the business. I spoke to the business directly about this and many other things and they confirmed this hypothesis and helped me glean the following:</p>
+
+<blockquote>
+<p><strong>We believe</strong> that by allowing the business to ask for payment as soon as an order is confirmed <strong>will</strong> provide a better experience for the business <strong>and</strong> less unpaid orders <strong>and</strong> a more consistent experience for the customer.</p>
+</blockquote>
+
+<p>-</p>
+
+<blockquote>
+<p><strong>We believe</strong> that an integrated ordering and payment platform <strong>will</strong> help the business massively with tracking orders and their statuses.</p>
+</blockquote>
+
+<p>-</p>
+
+<blockquote>
+<p><strong>We believe that</strong> the current ordering system leads to leaks in potential repeat business opportunities due to lack of marketing pipeline.</p>
+</blockquote>
+
+<p>-</p>
+
+<blockquote>
+<p><strong>We believe</strong> that a customer facing online ordering platform <strong>will</strong> improve repeat business massively by bringing around a digital representation of a marketing pipeline.</p>
+</blockquote>
+
+<p>-</p>
+
+<blockquote>
+<p><strong>We believe</strong>  that tweeting the menu weekly can cause issues with menu versions as it&rsquo;s possible for customers to read the menu from an older tweet</p>
+</blockquote>
+
+<h2 id="product-vision">Product Vision 👁</h2>
+
+<p><img src="pv-teaser-banner.png" alt="pv_teaser.png" /></p>
+
+<p>&ndash;
+Using a Product Vision board. I created some statements that loosely represented my vision for the product and came up wit the following  vision statement:</p>
+
+<blockquote>
+<p>The platform is being created to simplify and integrate the curry ordering process. This will be of benefit to the customer and the business. It will serve as a foundation for building a highly refined user-focused experience that doesn&rsquo;t in any way hinder the current process and actually improves it through sheer simplicity in every way. The system will integrate everything including deliveries and payments and give an <strong>end-to-end</strong> experience for customers and the business users alike.</p>
+</blockquote>
+
+<p>I also done some work on &laquo;Target Groups&raquo; and &laquo;Business Goals&raquo; - as per the <a href="https://www.romanpichler.com/tools/product-vision-board/" target="_blank">Product Vision Board created and popularised by Roman Pichler</a></p>
+
+<p>The product vision board is undeniably an excellent tool that&rsquo;s designed to help understand the true vision and business value of a product to a customer. Though when doing this I got a little bored (no pun intended) as I felt that I knew enough about the vision and that I could confirm my Hypothesis and go straight to writing user stories&hellip; Sorry Roman</p>
+
+<h2 id="user-interview">User interview</h2>
+
+<p>I spoke with Hardeep from the hardeepisyourcurry team briefly on zoom. I managed to confirm most of my hypothesis, but at the same time communicated some more advanced ideas which I had to move to one side.</p>
+
+<p>Often when speaking to users they can become fixated on the <strong>solution</strong> and then start communicating ideas as <strong>solutions</strong> rather than problems. This can be difficult for PM&rsquo;s to work around and it&rsquo;s important to realise that <strong>the super-set of solutions to problems come from a sub set of problems</strong>. Also that a different solution can be created to eliminate the same problem. Teams which allow their staff to communicate too much in the solution space end up having products which implement those solutions as requested. It&rsquo;s better to find the reason behind a suggested solution before agreeing to implement it. This comes back to the <strong>five whys</strong> and <strong>root cause analysis</strong>.</p>
+
+<p><strong>It&rsquo;s our job to scratch under the surface of a proposed solution, ask why, do some digging. Then we can understand the needs of the user more clearly</strong></p>
+
+<h2 id="job-stories-not-user-stories">Job Stories, not User Stories</h2>
+
+<p><img src="post-it-teaser-1.png" alt="post-it-teaser-1.png" /></p>
+
+<p>I&rsquo;ve discovered that classic user stories just don&rsquo;t cut the mustard..</p>
+
+<p>the classic user story..</p>
+
+<ul>
+<li><strong>As a</strong> _____<em>persona here</em></li>
+<li><strong>I want</strong> _____ <em>feature here</em></li>
+<li><strong>So that</strong> _____<em>desired outcome here</em></li>
+</ul>
+
+<p>&hellip; is vague and difficult to work with.</p>
+
+<p>Job Stories, however focuses the story around a <em>job that needs to be done</em>. Job Stories come from the <strong>Jobs To Be Done</strong> framework (JTBD) which is a really nice alternative to user stories.</p>
+
+<p>The anatomy of a Job Story isn&rsquo;t too difficult to remember:</p>
+
+<ul>
+<li><strong>When</strong> _____<em>Something happens, or the need for some action arises</em></li>
+<li><strong>I want to</strong> _____<em>achieve some task</em></li>
+<li><strong>So I can</strong> _____<em>obtain some benefit</em></li>
+</ul>
+
+<p><a href="https://jtbd.info/replacing-the-user-story-with-the-job-story-af7cdee10c27" target="_blank">Replacing the User Story with the Job Story</a> is a great introductory article in why Job Stories are better than User Stories and goes into a lot more detail than I will here, but I loved the example of where user stories fall down with this user story for a snickers snack.</p>
+
+<h3 id="user-story-vs-job-story">User Story vs Job Story</h3>
+
+<ul>
+<li><strong>As a</strong> human / person who eats food / user with a mouth</li>
+<li><strong>I want</strong> to eat something</li>
+<li><strong>So that</strong>  I can stop my hunger quickly</li>
+</ul>
+
+<p>.. RUBBISH. So all humans will want a snickers?</p>
+
+<p>Job Story focuses the story around an action or event, rather than focusing on a particular persona.</p>
+
+<ul>
+<li><strong>When</strong> I&rsquo;m hungry and on the go</li>
+<li><strong>I want to</strong> eat a snack quickly</li>
+<li><strong>So I can</strong> satisfy my hunger and move on with what I&rsquo;m doing</li>
+</ul>
+
+<p>Job Stories for the WIN. We now have a framework for putting so much more context around the scenario as it&rsquo;s based on a <strong>situation</strong>. In this wonderful post <a href="https://jtbd.info/5-tips-for-writing-a-job-story-7c9092911fc9" target="_blank">5 Tips for Writing a Job Story</a> on <a href="https://jtbd.info/" target="_blank">JTBD.info</a>, Alan Klement talks about how to add contextual to make our job stories work a lot better.</p>
+
+<h3 id="current-job-stories-for-curry-customers">Current Job Stories for Curry Customers</h3>
+
+<blockquote>
+<ul>
+<li><strong>When</strong> I want a tasty curry for dinner over the weekend</li>
+<li><strong>I want to</strong> order and pay for the curry online and have it delivered</li>
+<li><strong>So I can</strong> plan my weekend knowing that there&rsquo;s one less meal to make and that it will be really good</li>
+</ul>
+</blockquote>
+
+<p>-</p>
+
+<blockquote>
+<ul>
+<li><strong>When</strong> I order a tasty curry</li>
+<li><strong>I want to</strong> know that the order has been received and stay informed on the status</li>
+<li><strong>So I can</strong> have certainty over what&rsquo;s happening with my planned meal</li>
+</ul>
+</blockquote>
+
+<p>-</p>
+
+<blockquote>
+<ul>
+<li><strong>When</strong> I&rsquo;ve order a tasty curry for the coming weekend</li>
+<li><strong>I want to</strong> know as soon as possible if my order has been confirmed</li>
+<li><strong>So I can</strong> have certainty over what&rsquo;s happening with my planned meal or if I need to arrange alternatives for that day</li>
+</ul>
+</blockquote>
+
+<h3 id="current-job-stories-for-curry-business">Current Job Stories for Curry Business</h3>
+
+<blockquote>
+<ul>
+<li><strong>When</strong> it comes time to change the menu for the coming week of orders</li>
+<li><strong>I want to</strong> update the menu in one place</li>
+<li><strong>So I can</strong> dependably know that the current menu is set and that someone isn&rsquo;t reading an older menu</li>
+</ul>
+</blockquote>
+
+<p>-</p>
+
+<blockquote>
+<ul>
+<li><strong>When</strong> it comes time to update the delivery days for the week</li>
+<li><strong>I want to</strong> update the delivery dates in one place</li>
+<li><strong>So I can</strong> dependably know that the delivery dates are set and that someone isn&rsquo;t reading older delivery dates and so I can receive orders only for those new delivery dates</li>
+</ul>
+</blockquote>
+
+<p>-</p>
+
+<blockquote>
+<ul>
+<li><strong>When</strong> I receive a curry order from a customer</li>
+<li><strong>I want to</strong> be able to decide if we can actually satisfy their order</li>
+<li><strong>So I can</strong> work out if we can actually deliver to their location on the day they&rsquo;ve asked for with the order they&rsquo;ve chosen</li>
+</ul>
+</blockquote>
+
+<p>-</p>
+
+<blockquote>
+<ul>
+<li><strong>When</strong> I receive a curry order from a customer</li>
+<li><strong>I want to</strong> be able to accept or decline the order</li>
+<li><strong>So I can</strong> control the number of orders we&rsquo;re preparing and delivering each day in the locations we&rsquo;ve requested</li>
+</ul>
+</blockquote>
+
+<p>-</p>
+
+<blockquote>
+<ul>
+<li><strong>When</strong> I&rsquo;ve decided to confirm an order from a customer</li>
+<li><strong>I want to</strong> inform them automatically that we will fulfil the order as well as send them a request for payment</li>
+<li><strong>So I can</strong> keep my customers informed and in the loop about the status of their order request as well as make sure I&rsquo;m offering them a chance to pay as early as possible while still keeping control over the process myself</li>
+</ul>
+</blockquote>
+
+<h2 id="solution-process-map-vision">Solution Process Map (vision)</h2>
+
+<p>Using the job stories I sketched out a process map that would mimic the current process as closely as possible, but using a web platform. The jobs to be done by the curry business and the customer ordering curries are mapped on here.</p>
+
+<p><img src="digital_process_flow.png" alt="" /></p>
+
+<ul>
+<li><strong>1.</strong> Business creates menu and delivery dates on system</li>
+<li><strong>2.</strong> Customer sees menu</li>
+<li><strong>3.</strong> Customer creates an order</li>
+<li><strong>4.</strong> System notifies curry business that order has been created</li>
+<li><strong>5.</strong> Business sees new order</li>
+<li><strong>6.</strong> Business decides if confirming order</li>
+<li><strong>7.</strong> Business accepts and confirms order on system</li>
+<li><strong>8.</strong> System notifies customer of acceptance + asks for payment</li>
+<li><strong>9.</strong> Customer pays on ordering system (no separate payment system required)</li>
+<li><strong>10.</strong> Business delivers order</li>
+<li><strong>11.</strong> Customer receives curry</li>
+</ul>
+
+<p>This is my proposed solution! Combined with the job stories above I turned that into a working full stack web app&rsquo;.</p>
+
+<hr />
+
+<p>This was <strong>Part 1</strong> of the series <strong>Full Stack Curry</strong>.</p>
+
+<p>In the next post I&rsquo;ll explain the systems architecture and building blocks of the application.</p>
+
+<p>Got feedback on the article? Got questions, corrections or ideas? If you want to talk to me, I am really open to meeting new people and learning things. Please reach out..</p>
+
+<ul>
+<li><strong>Say hi on Twitter</strong> <a href="🐦 https://twitter.com/colin_riddell" target="_blank">https://twitter.com/colin_riddell</a></li>
+<li><strong>Follow me on LinkedIn</strong> <a href="https://www.linkedin.com/in/cjriddell/" target="_blank">https://www.linkedin.com/in/cjriddell/</a></li>
+</ul>
+
+      </article>
+
+      <p class="post-meta">Tags:&nbsp;
+        
+            
+            <a href="https://colin-riddell.github.io/tags/user">user</a>
+        
+            ,&nbsp;
+            <a href="https://colin-riddell.github.io/tags/user-stories">user-stories</a>
+        
+            ,&nbsp;
+            <a href="https://colin-riddell.github.io/tags/product">product</a>
+        
+            ,&nbsp;
+            <a href="https://colin-riddell.github.io/tags/ux">ux</a>
+        
+            ,&nbsp;
+            <a href="https://colin-riddell.github.io/tags/process-mapping">process-mapping</a>
+        
+            ,&nbsp;
+            <a href="https://colin-riddell.github.io/tags/jobs-to-be-done">jobs-to-be-done</a>
+        
+            ,&nbsp;
+            <a href="https://colin-riddell.github.io/tags/JTBD">JTBD</a>
+        
+            ,&nbsp;
+            <a href="https://colin-riddell.github.io/tags/job-stories">job-stories</a>
+        
+            ,&nbsp;
+            <a href="https://colin-riddell.github.io/tags/product-planning">product-planning</a>
+        
+            ,&nbsp;
+            <a href="https://colin-riddell.github.io/tags/product-design">product-design</a>
+        
+            ,&nbsp;
+            <a href="https://colin-riddell.github.io/tags/agile">agile</a>
+        
+            ,&nbsp;
+            <a href="https://colin-riddell.github.io/tags/full-stack">full-stack</a>
+        
+      </p>
+
+      
+
+    </div>
+  </div>
+</div>
+    <footer class="footer">
+      <div class="p2 wrap">
+        <div class="measure mt1 center">
+      <nav class="social-icons icons">
+<a class="fa fa-rss rss" href="../../index.xml"></a>
+
+<a class="fa fa-twitter twitter" href="https://twitter.com/colin_riddell"></a>
+
+</nav>
+
+          <small>
+            Copyright &#169; 2017<br>
+            Powered by <a href="http://gohugo.io/" target="_blank">Hugo</a> &amp; <a href="https://github.com/azmelanar/hugo-theme-pixyll" target="_blank">Pixyll</a>
+          </small>
+        </div>
+      </div>
+    </footer>
+
+    
+    <script src="../../js/highlight.pack.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+
+    
+    
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-149961187-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+
+</body>
+</html>
+

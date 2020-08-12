@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>process-mapping on Colin Riddell</title>
+    <link>https://colin-riddell.github.io/tags/process-mapping/</link>
+    <description>Recent content in process-mapping on Colin Riddell</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 10 Aug 2020 19:04:15 +0100</lastBuildDate>
+    
+	<atom:link href="https://colin-riddell.github.io/tags/process-mapping/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Full Stack Curry #1: The Problem</title>
+      <link>https://colin-riddell.github.io/post/full-stack-curry-part-1/</link>
+      <pubDate>Mon, 10 Aug 2020 19:04:15 +0100</pubDate>
+      
+      <guid>https://colin-riddell.github.io/post/full-stack-curry-part-1/</guid>
+      <description>This is part 1 in a series of posts. In this series I am going to explain how I created a full-stack curry ordering app&amp;rsquo;. Yes, you heard that correctly. I built and deployed into production a curry ordering app that allows people to order curry online. The project was inspired by the lovely team over at #hardeepisyourcurry
+I&amp;rsquo;m going to share how I did it in as much detail as possible, while highlighting the learning curves and problems that I faced along the way.</description>
+    </item>
+    
+  </channel>
+</rss>
