@@ -1,0 +1,24 @@
+
+  <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+      <title>Colin Riddell - Blog</title>
+      <link>https://colin-riddell.github.io//blog</link>
+      <description>Colin Riddell - an experienced Software Engineer</description>
+      <language>en-gb</language>
+      <managingEditor>undefined (Colin Riddell)</managingEditor>
+      <webMaster>undefined (Colin Riddell)</webMaster>
+      <lastBuildDate>Mon, 10 Aug 2020 00:00:00 GMT</lastBuildDate>
+      <atom:link href="https://colin-riddell.github.io//tags/product-design/feed.xml" rel="self" type="application/rss+xml"/>
+      
+  <item>
+    <guid>https://colin-riddell.github.io//blog/full-stack-curry-part-1</guid>
+    <title>Full Stack Curry #1: The Problem</title>
+    <link>https://colin-riddell.github.io//blog/full-stack-curry-part-1</link>
+    undefined
+    <pubDate>Mon, 10 Aug 2020 00:00:00 GMT</pubDate>
+    <author>undefined (Colin Riddell)</author>
+    <category>user</category><category>user-stories</category><category>product</category><category>ux</category><category>process-mapping</category><category>jobs-to-be-done</category><category>JTBD</category><category>job-stories</category><category>product-planning</category><category>product-design</category><category>agile</category><category>full-stack</category>
+  </item>
+
+    </channel>
+  </rss>

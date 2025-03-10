@@ -1,0 +1,5 @@
+User-Agent: *
+Allow: /
+
+Host: https://colin-riddell.github.io/
+Sitemap: https://colin-riddell.github.io//sitemap.xml
