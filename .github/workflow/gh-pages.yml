@@ -1,0 +1,39 @@
+name: Deploy Next.js Static Site to GitHub Pages
+
+on:
+  push:
+    branches:
+      - master  # Change this if your default branch is different
+
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18  # Use latest stable version
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Build Next.js Static Site
+        run: npm run build && npm run export
+
+      - name: Fix Permissions
+        run: chmod -c -R +rX "out" | while read line; do echo "::warning::$line"; done
+
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages
+          folder: out
+          clean: true
+
