@@ -27,6 +27,10 @@ jobs:
       - name: Build Next.js Static Site
         run: npm run build && npm run export
 
+      - name: Disable Jekyll
+        run: touch out/.nojekyll
+
+
       - name: Fix Permissions
         run: chmod -c -R +rX "out" | while read line; do echo "::warning::$line"; done
 
